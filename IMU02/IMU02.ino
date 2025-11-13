@@ -3,26 +3,27 @@
 
 m5::imu_data_t imuData;
 
+// スプライト（オフスクリーンバッファ）
+LGFX_Sprite sprite(&M5.Display);
+
 // ボールの状態
 float ballX = 0;  // ボールのX座標（画面中央から開始）
 float ballY = 0;  // ボールのY座標（画面中央から開始）
 float velX = 0;   // X軸方向の速度
 float velY = 0;   // Y軸方向の速度
 
-const int BALL_RADIUS = 19;  // ボールの半径（ピクセル）
+const int BALL_RADIUS = 15;  // ボールの半径（ピクセル）
 const float GRAVITY = 9.8;   // 重力加速度（m/s²）
 const float DAMPING = 0.95;  // 減衰係数（摩擦）
 
 void setup() {
   M5.begin();
   M5.Display.setRotation(3);
-  M5.Display.setTextDatum(top_center);
-  M5.Display.setFont(&fonts::FreeMonoBold12pt7b);
   
-  // 画面をクリアしてタイトルを表示
-  M5.Display.clear(BLACK);
-  M5.Display.setTextColor(WHITE, BLACK);
-  M5.Display.drawString("IMU Ball Control", M5.Display.width() / 2, 10);
+  // スプライトを画面サイズで初期化
+  sprite.createSprite(M5.Display.width(), M5.Display.height());
+  sprite.setTextDatum(top_center);
+  sprite.setFont(&fonts::FreeMonoBold12pt7b);
   
   // ボールを画面中央に配置
   ballX = M5.Display.width() / 2;
@@ -34,18 +35,15 @@ void loop() {
   M5.Imu.update();
   imuData = M5.Imu.getImuData();
 
-  // 前回のボール位置を消去（黒で上書き）
-  M5.Display.fillCircle((int)ballX, (int)ballY, BALL_RADIUS + 1, BLACK);
-
   // 加速度を使用して速度を更新
-  // Y軸: 左右の動き（右が正）
-  // X軸: 上下の動き（上が正）
+  // X軸: 左右の動き（右が正）
+  // Y軸: 上下の動き（上が正）
   // 実際のデバイスの動きを反映させるため、符号を調整
-  velX -= imuData.accel.y * 1.5;  // 加速度を積分して速度に変換
-  velY += imuData.accel.x * 1.5;  // Y軸は上下反転（上が正になるように）
+  velX += imuData.accel.x * 0.1;  // 加速度を積分して速度に変換
+  velY -= imuData.accel.y * 0.1;  // Y軸は上下反転（上が正になるように）
   
   // Z軸（重力）はY方向の動きに影響（デバイスを傾けるとボールが動く）
-  //velY += (imuData.accel.z + GRAVITY) * 0.05;  // 重力補正
+  velY += (imuData.accel.z + GRAVITY) * 0.05;  // 重力補正
 
   // 減衰を適用（摩擦）
   velX *= DAMPING;
@@ -74,28 +72,30 @@ void loop() {
     velY = -velY * 0.8;
   }
 
-  // 新しい位置にボールを描画
-  M5.Display.fillCircle((int)ballX, (int)ballY, BALL_RADIUS, CYAN);
+  // === スプライトバッファに描画 ===
+  // スプライトを黒でクリア（全画面をリセット）
+  sprite.fillScreen(BLACK);
+  
+  // タイトルを描画
+  sprite.setTextColor(WHITE, BLACK);
+  sprite.drawString("IMU Ball Control", M5.Display.width() / 2, 10);
+  
+  // ボールを描画
+  sprite.fillCircle((int)ballX, (int)ballY, BALL_RADIUS, CYAN);
   
   // ボールの中心に点を描画（視認性向上）
-  M5.Display.fillCircle((int)ballX, (int)ballY, 3, WHITE);
-
+  sprite.fillCircle((int)ballX, (int)ballY, 3, WHITE);
+  
   // デバッグ情報を表示（右下に小さく）
-  //M5.Display.setCursor(M5.Display.width() - 150, M5.Display.height() - 30);
-  M5.Display.setCursor(0, 100);
-  M5.Display.setTextColor(YELLOW, BLACK);
-  M5.Display.printf(" X:%5.1f\n", ballX);
-  M5.Display.printf(" Y:%5.1f\n", ballY);
-  M5.Display.printf(" vX:%5.1f\n", velX);
-  M5.Display.printf(" vY:%5.1f\n", velY);
+  sprite.setCursor(M5.Display.width() - 150, M5.Display.height() - 60);
+  sprite.setTextColor(YELLOW, BLACK);
+  sprite.printf("X:%5.1f\n", ballX);
+  sprite.printf("Y:%5.1f\n", ballY);
+  sprite.printf("vX:%5.1f\n", velX);
+  sprite.printf("vY:%5.1f", velY);
 
-  M5.Display.printf(" AccX = %6.2f  \n", imuData.accel.x);
-  M5.Display.printf(" AccY = %6.2f  \n", imuData.accel.y);
-  M5.Display.printf(" AccZ = %6.2f  \n\n", imuData.accel.z);
-
-  M5.Display.printf(" GyrX = %6.2f  \n", imuData.gyro.x);
-  M5.Display.printf(" GyrY = %6.2f  \n", imuData.gyro.y);
-  M5.Display.printf(" GyrZ = %6.2f  \n", imuData.gyro.z);
+  // スプライトバッファを画面に一括転送（チラツキなし）
+  sprite.pushSprite(0, 0);
 
   delay(50);  // 50ms間隔で更新（20fps）
 } 
