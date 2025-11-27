@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../GitHub/Tab5_Arduino"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.ino": "cpp"
+		}
+	}
+}

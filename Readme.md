@@ -5,76 +5,37 @@
 ## 📁 プロジェクト構造
 
 ```
-Tab5_Arduino/
+Arduino/
 ├── BarGraph/                    # バーグラフアニメーション
 │   └── BarGraph.ino
-├── DragDrop/                    # ドラッグ&ドロップ機能
-│   └── DragDrop.ino
-├── DroomMachine/                # ドラムマシン（音楽シーケンサー）
-│   ├── DroomMachine.ino
-│   └── [フォントファイル]
-├── GameOfLife/                  # ライフゲーム
-│   └── GameOfLife.ino
 ├── IMU/                         # IMUセンサー（加速度・ジャイロ）
-│   ├── IMU.ino
-│   └── Readme.md
-├── IMU02/                       # IMUセンサー（ボール物理シミュレーション）
-│   ├── IMU02.ino
-│   └── Readme.md
-├── LongTextScroll/              # 長いテキストのスクロール表示
-│   ├── LongTextScroll.ino
-│   └── Readme.md
-├── Lvgl/                        # LVGL GUI デモ（基本版）
-│   ├── lvgl.ino
-│   ├── ui.h, ui.c              # LVGL UI定義
+│   └── IMU.ino
+├── M5_Tab5_Basic/              # 基本的なHello World
+│   └── M5_Tab5_Basic.ino
+├── MIC/                        # マイク録音・再生
+│   └── MIC.ino
+├── Power/                      # バッテリー管理
+│   └── Power.ino
+├── RTC/                        # リアルタイムクロック
+│   └── RTC.ino
+├── Speaker/                    # スピーカーテスト
+│   └── Speaker.ino
+├── Touch/                      # タッチセンサー
+│   └── Touch.ino
+├── WIFI/                       # WiFi接続
+│   └── WIFI.ino
+├── tab5_arduino_basic/         # LVGL GUI デモ
+│   ├── tab5_arduino_basic.ino
+│   ├── ui.h, ui.c             # LVGL UI定義
 │   └── SLS_Project/           # Square Line Studio プロジェクト
-├── M5Unified/                   # M5Unified基本デモ
-│   ├── M5Unified.ino
-│   └── Readme.md
-├── MIC/                         # マイク録音・再生
-│   ├── MIC.ino
-│   └── Readme.md
-├── Power/                       # バッテリー管理
-│   ├── Power.ino
-│   └── Readme.md
-├── RTC/                         # リアルタイムクロック
-│   ├── RTC.ino
-│   └── Readme.md
-├── SD/                          # SDカード機能
-│   ├── SD.ino
-│   └── Readme.md
-├── Speaker/                     # スピーカーテスト
-│   ├── Speaker.ino
-│   └── Readme.md
-├── SpinTile/                    # スピンタイルアニメーション
-│   ├── SpinTile.ino
-│   └── Readme.md
-├── Sprite/                      # スプライト（メモリ描画領域）デモ
-│   └── Sprite.ino
-├── TextLogScroll/               # テキストログの縦スクロール
-│   ├── TextLogScroll.ino
-│   └── Readme.md
-├── Touch/                       # タッチセンサー
-│   ├── Touch.ino
-│   └── Readme.md
-├── TouchTest/                   # タッチテスト（クリアボタン付き）
-│   ├── TouchTest.ino
-│   └── Readme.md
-├── WIFI/                        # WiFi接続
-│   ├── WIFI.ino
-│   └── Readme.md
-├── tab5_lvgl/                   # LVGL GUI デモ（拡張版）
-│   ├── tab5_lvgl.ino
-│   ├── ui.h, ui.c              # LVGL UI定義
-│   └── SLS_Project/           # Square Line Studio プロジェクト
-├── libraries/                   # 必要なライブラリ
-│   ├── LovyanGFX/              # グラフィックライブラリ
-│   ├── M5GFX/                  # M5Stack用グラフィック
-│   ├── M5Unified/              # M5Stack統合ライブラリ
-│   ├── M5UnitSynth/            # M5UnitSynth音声合成
-│   └── lvgl/                   # LVGL GUI フレームワーク
-├── compile.sh                  # コンパイルスクリプト
-└── README.md                   # このファイル
+├── libraries/                  # 必要なライブラリ
+│   ├── LovyanGFX/             # グラフィックライブラリ
+│   ├── M5GFX/                 # M5Stack用グラフィック
+│   ├── M5Unified/             # M5Stack統合ライブラリ
+│   └── lvgl/                  # LVGL GUI フレームワーク
+├── compile.sh                 # コンパイルスクリプト
+├── monitor.sh                 # シリアルモニタースクリプト
+└── README.md                  # このファイル
 ```
 
 ## 🚀 セットアップ
@@ -97,9 +58,6 @@ arduino-cli lib install "LovyanGFX@1.2.7"
 
 # LVGL ライブラリ（LVGL デモ用）
 arduino-cli lib install "lvgl@8.3.11"
-
-# M5UnitSynth ライブラリ（DroomMachine用）
-arduino-cli lib install "M5UnitSynth"
 ```
 
 ### ボード設定
@@ -115,15 +73,15 @@ arduino-cli lib install "M5UnitSynth"
 Arduino IDEで正常動作した設定をCLIでも完全再現するため、以下のFQBNオプションを指定してください。
 
 ```bash
-# コンパイル例（tab5_lvglプロジェクト）
+# コンパイル
 arduino-cli compile \
   --fqbn esp32:esp32:esp32p4:PSRAM=enabled,FlashSize=16M,PartitionScheme=custom,CDCOnBoot=cdc,USBMode=hwcdc,UploadSpeed=921600 \
-  tab5_lvgl/tab5_lvgl.ino
+  tab5_arduino_basic/tab5_arduino_basic.ino
 
-# 転送例
+# 転送
 arduino-cli upload -p /dev/cu.usbmodem21201 \
   --fqbn esp32:esp32:esp32p4:PSRAM=enabled,FlashSize=16M,PartitionScheme=custom,CDCOnBoot=cdc,USBMode=hwcdc,UploadSpeed=921600 \
-  tab5_lvgl/tab5_lvgl.ino
+  tab5_arduino_basic/tab5_arduino_basic.ino
 ```
 
 注記:
@@ -132,19 +90,7 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 
 ## 📋 プログラム一覧
 
-### 基本機能
-
-#### 1. M5Unified - Hello World
-**ファイル**: `M5Unified/M5Unified.ino`
-
-基本的なHello Worldプログラム。カウンター機能付き。
-
-**機能**:
-- 画面にテキスト表示
-- カウンター機能
-- シリアル出力
-
-#### 2. BarGraph - バーグラフアニメーション
+### 1. BarGraph - バーグラフアニメーション
 **ファイル**: `BarGraph/BarGraph.ino`
 
 64本のバーが正弦波パターンでアニメーションするカラフルなバーグラフ表示。
@@ -154,9 +100,12 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 - カラフルなグラデーション表示
 - 滑らかなアニメーション効果
 
-### センサー・入力
+**使用方法**:
+```bash
+./compile.sh BarGraph/BarGraph.ino
+```
 
-#### 3. IMU - センサー情報表示
+### 2. IMU - センサー情報表示
 **ファイル**: `IMU/IMU.ino`
 
 加速度センサーとジャイロスコープのリアルタイムデータを表示。
@@ -166,37 +115,17 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 - ジャイロスコープデータ（X, Y, Z軸）
 - リアルタイム更新
 
-#### 4. IMU02 - ボール物理シミュレーション
-**ファイル**: `IMU02/IMU02.ino`
+### 3. M5_Tab5_Basic - Hello World
+**ファイル**: `M5_Tab5_Basic/M5_Tab5_Basic.ino`
 
-IMUセンサーのデータを使用してボールの物理シミュレーションを表示。
-
-**機能**:
-- IMUデータによるボールの動き
-- 重力・減衰の物理演算
-- スプライト（オフスクリーンバッファ）使用
-
-#### 5. Touch - タッチセンサー
-**ファイル**: `Touch/Touch.ino`
-
-タッチセンサーの動作確認プログラム。
+基本的なHello Worldプログラム。カウンター機能付き。
 
 **機能**:
-- タッチ座標検出
-- ボタン押下検出
-- タッチ状態表示
+- 画面にテキスト表示
+- カウンター機能
+- シリアル出力
 
-#### 6. TouchTest - タッチテスト（クリアボタン付き）
-**ファイル**: `TouchTest/TouchTest.ino`
-
-タッチ操作のテストプログラム。クリアボタン機能付き。
-
-**機能**:
-- タッチ座標の描画
-- クリアボタンで画面クリア
-- タッチ軌跡の表示
-
-#### 7. MIC - マイク録音・再生
+### 4. MIC - マイク録音・再生
 **ファイル**: `MIC/MIC.ino`
 
 マイクで録音し、タッチで再生するプログラム。
@@ -211,100 +140,7 @@ IMUセンサーのデータを使用してボールの物理シミュレーシ�
 - 画面をタッチして録音開始
 - 再度タッチして再生
 
-### 出力・表示
-
-#### 8. Speaker - スピーカーテスト
-**ファイル**: `Speaker/Speaker.ino`
-
-スピーカーの動作テストプログラム。
-
-**機能**:
-- 異なる周波数の音声出力
-- 音階テスト
-
-#### 9. Sprite - スプライト（メモリ描画領域）デモ
-**ファイル**: `Sprite/Sprite.ino`
-
-メモリ描画領域（スプライト）を使用した描画デモ。直接描画とメモリ描画の比較。
-
-**機能**:
-- 直接描画（チラツキあり）
-- メモリ描画領域（チラツキなし）
-- グラデーション表示
-
-#### 10. LongTextScroll - 長いテキストのスクロール表示
-**ファイル**: `LongTextScroll/LongTextScroll.ino`
-
-長いテキストを横スクロールで表示するプログラム。
-
-**機能**:
-- 日本語テキスト対応
-- 滑らかなスクロールアニメーション
-- EPD（電子ペーパー）対応
-
-#### 11. TextLogScroll - テキストログの縦スクロール
-**ファイル**: `TextLogScroll/TextLogScroll.ino`
-
-テキストログを縦スクロールで表示するプログラム。
-
-**機能**:
-- 縦スクロール表示
-- 複数行テキスト対応
-- EPD（電子ペーパー）対応
-
-#### 12. SpinTile - スピンタイルアニメーション
-**ファイル**: `SpinTile/SpinTile.ino`
-
-回転するタイルのアニメーション表示。
-
-**機能**:
-- 3D風回転アニメーション
-- 滑らかな動き
-- カラフルな表示
-
-### ゲーム・エンターテインメント
-
-#### 13. GameOfLife - ライフゲーム
-**ファイル**: `GameOfLife/GameOfLife.ino`
-
-Conway's Game of Life（ライフゲーム）の実装。
-
-**機能**:
-- セルオートマトンの実装
-- リアルタイム更新
-- 画面サイズに応じた自動調整
-
-#### 14. DroomMachine - ドラムマシン（音楽シーケンサー）
-**ファイル**: `DroomMachine/DroomMachine.ino`
-
-ドラムマシン（音楽シーケンサー）プログラム。M5UnitSynthを使用。
-
-**機能**:
-- 16ステップシーケンサー
-- 5種類のドラム音
-- タッチ操作でノート編集
-- 再生・停止機能
-- BPM調整
-
-**必要なライブラリ**:
-- M5UnitSynth
-
-### インタラクティブ
-
-#### 15. DragDrop - ドラッグ&ドロップ機能
-**ファイル**: `DragDrop/DragDrop.ino`
-
-4つのカラーボックスをドラッグ&ドロップで移動できるプログラム。
-
-**機能**:
-- マルチタッチ対応
-- ドラッグ&ドロップ操作
-- タッチ状態の詳細表示（touch, hold, flick, drag）
-- 4つのカラーボックス
-
-### システム・通信
-
-#### 16. Power - バッテリー管理
+### 5. Power - バッテリー管理
 **ファイル**: `Power/Power.ino`
 
 バッテリーの状態を監視・表示するプログラム。
@@ -314,7 +150,7 @@ Conway's Game of Life（ライフゲーム）の実装。
 - バッテリー電圧表示
 - バッテリーレベル表示
 
-#### 17. RTC - リアルタイムクロック
+### 6. RTC - リアルタイムクロック
 **ファイル**: `RTC/RTC.ino`
 
 リアルタイムクロックの設定と表示。
@@ -324,18 +160,26 @@ Conway's Game of Life（ライフゲーム）の実装。
 - 現在時刻表示
 - 日付・曜日表示
 
-#### 18. SD - SDカード機能
-**ファイル**: `SD/SD.ino`
+### 7. Speaker - スピーカーテスト
+**ファイル**: `Speaker/Speaker.ino`
 
-SDカードの読み書き機能のデモ。
+スピーカーの動作テストプログラム。
 
 **機能**:
-- SDカード検出
-- ファイル読み書き
-- PNGファイル検出
-- テキストファイル作成
+- 異なる周波数の音声出力
+- 音階テスト
 
-#### 19. WIFI - WiFi接続
+### 8. Touch - タッチセンサー
+**ファイル**: `Touch/Touch.ino`
+
+タッチセンサーの動作確認プログラム。
+
+**機能**:
+- タッチ座標検出
+- ボタン押下検出
+- タッチ状態表示
+
+### 9. WIFI - WiFi接続
 **ファイル**: `WIFI/WIFI.ino`
 
 WiFi接続とネットワーク設定のデモ。
@@ -351,22 +195,10 @@ const char *ssid     = "YOUR_WIFI_SSID";
 const char *password = "YOUR_WIFI_PASSWORD";
 ```
 
-### GUI・LVGL
+### 10. tab5_arduino_basic - LVGL GUI デモ
+**ファイル**: `tab5_arduino_basic/tab5_arduino_basic.ino`
 
-#### 20. Lvgl - LVGL GUI デモ（基本版）
-**ファイル**: `Lvgl/lvgl.ino`
-
-LVGLを使用した基本GUIデモ。Square Line Studioプロジェクト付き。
-
-**機能**:
-- LVGL GUI フレームワーク
-- タッチ操作
-- Square Line Studioプロジェクト対応
-
-#### 21. tab5_lvgl - LVGL GUI デモ（拡張版）
-**ファイル**: `tab5_lvgl/tab5_lvgl.ino`
-
-LVGLを使用した高機能GUIデモ。複数画面対応。
+LVGLを使用した高機能GUIデモ。Square Line Studioプロジェクト付き。
 
 **機能**:
 - LVGL GUI フレームワーク
@@ -374,7 +206,6 @@ LVGLを使用した高機能GUIデモ。複数画面対応。
 - スライダー・ボタン・アーク表示
 - 自動アニメーション
 - 明度調整
-- 複数画面（Screen1, Screen2, Screen3）
 
 **特別な設定**:
 - カスタムパーティション設定
@@ -419,11 +250,6 @@ LVGLを使用した高機能GUIデモ。複数画面対応。
 - **バージョン**: 8.3.11
 - **説明**: 軽量GUI フレームワーク
 - **機能**: リッチなUI、アニメーション、ウィジェット
-
-### M5UnitSynth
-- **説明**: M5UnitSynth音声合成ライブラリ
-- **機能**: MIDI音源、ドラム音、音楽シーケンサー対応
-- **用途**: DroomMachineプロジェクトで使用
 
 ## 🔧 トラブルシューティング
 
@@ -489,29 +315,18 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 ✅ **全てのプログラムが正常に動作確認済み**
 
-| カテゴリ | プログラム | 状態 | 備考 |
-|---------|-----------|------|------|
-| **基本機能** | M5Unified | ✅ 動作確認済み | Hello World + カウンター |
-| | BarGraph | ✅ 動作確認済み | カラフルなバーグラフアニメーション |
-| **センサー・入力** | IMU | ✅ 動作確認済み | 加速度・ジャイロセンサー表示 |
-| | IMU02 | ✅ 動作確認済み | ボール物理シミュレーション |
-| | Touch | ✅ 動作確認済み | タッチセンサー検出 |
-| | TouchTest | ✅ 動作確認済み | タッチテスト（クリアボタン付き） |
-| | MIC | ✅ 動作確認済み | マイク録音・再生機能 |
-| **出力・表示** | Speaker | ✅ 動作確認済み | スピーカーテスト |
-| | Sprite | ✅ 動作確認済み | スプライト（メモリ描画領域）デモ |
-| | LongTextScroll | ✅ 動作確認済み | 長いテキストのスクロール表示 |
-| | TextLogScroll | ✅ 動作確認済み | テキストログの縦スクロール |
-| | SpinTile | ✅ 動作確認済み | スピンタイルアニメーション |
-| **ゲーム・エンターテインメント** | GameOfLife | ✅ 動作確認済み | ライフゲーム |
-| | DroomMachine | ✅ 動作確認済み | ドラムマシン（音楽シーケンサー） |
-| **インタラクティブ** | DragDrop | ✅ 動作確認済み | ドラッグ&ドロップ機能 |
-| **システム・通信** | Power | ✅ 動作確認済み | バッテリー管理・監視 |
-| | RTC | ✅ 動作確認済み | リアルタイムクロック |
-| | SD | ✅ 動作確認済み | SDカード機能 |
-| | WIFI | ✅ 動作確認済み | WiFi接続デモ |
-| **GUI・LVGL** | Lvgl | ✅ 動作確認済み | LVGL GUI デモ（基本版） |
-| | **tab5_lvgl** | ✅ **動作確認済み** | **LVGL GUI デモ（拡張版）** |
+| プログラム | 状態 | メモリ使用量 | 備考 |
+|-----------|------|-------------|------|
+| BarGraph | ✅ 動作確認済み | 380,698バイト (29%) | カラフルなバーグラフアニメーション |
+| IMU | ✅ 動作確認済み | - | 加速度・ジャイロセンサー表示 |
+| M5_Tab5_Basic | ✅ 動作確認済み | - | Hello World + カウンター |
+| MIC | ✅ 動作確認済み | - | マイク録音・再生機能 |
+| Power | ✅ 動作確認済み | - | バッテリー管理・監視 |
+| RTC | ✅ 動作確認済み | - | リアルタイムクロック |
+| Speaker | ✅ 動作確認済み | - | スピーカーテスト |
+| Touch | ✅ 動作確認済み | - | タッチセンサー検出 |
+| WIFI | ✅ 動作確認済み | - | WiFi接続デモ |
+| **tab5_arduino_basic** | ✅ **動作確認済み** | **605,126バイト (46%)** | **LVGL GUI デモ** |
 
 ### 解決済みの技術的課題
 
@@ -545,9 +360,8 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 ### ✅ 達成した成果
 
-1. **全21プログラムの動作確認完了**
+1. **全10プログラムの動作確認完了**
    - 基本的なHello Worldから高機能なLVGL GUIデモまで
-   - ゲーム、音楽、インタラクティブアプリまで幅広いサンプル
    - 各プログラムのメモリ使用量とパフォーマンスを最適化
 
 2. **技術的課題の完全解決**
@@ -555,8 +369,6 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
    - LVGL 8.3.11との統合
    - ESP32-P4チップ対応
    - メモリ最適化
-   - マルチタッチ対応
-   - スプライト（オフスクリーンバッファ）の活用
 
 3. **開発環境の構築**
    - Arduino CLI設定の最適化
@@ -567,14 +379,11 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 | カテゴリ | プログラム数 | 動作率 | メモリ効率 |
 |---------|-------------|--------|-----------|
-| 基本機能 | 2個 | 100% | 最適化済み |
-| センサー・入力 | 5個 | 100% | 最適化済み |
-| 出力・表示 | 5個 | 100% | 最適化済み |
-| ゲーム・エンターテインメント | 2個 | 100% | 最適化済み |
-| インタラクティブ | 1個 | 100% | 最適化済み |
-| システム・通信 | 4個 | 100% | 最適化済み |
-| GUI・LVGL | 2個 | 100% | 最適化済み |
-| **合計** | **21個** | **100%** | **最適化済み** |
+| 基本機能 | 3個 | 100% | 最適化済み |
+| センサー | 2個 | 100% | 最適化済み |
+| 音声・通信 | 3個 | 100% | 最適化済み |
+| GUI・表示 | 2個 | 100% | 最適化済み |
+| **合計** | **10個** | **100%** | **最適化済み** |
 
 ### 🚀 今後の拡張可能性
 
@@ -603,4 +412,4 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 **最終更新**: 2024年12月（全プログラム動作確認完了）
 **対象デバイス**: M5Stack Tab5
 **開発環境**: Arduino IDE / Arduino CLI
-**動作確認**: 全21プログラム正常動作済み ✅
+**動作確認**: 全10プログラム正常動作済み ✅

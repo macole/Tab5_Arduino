@@ -1,22 +1,4 @@
-
-#include <M5GFX.h>
-M5GFX display;
-
-//#include <M5UnitOLED.h>
-//M5UnitOLED display; // default setting
-//M5UnitOLED display ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5UnitLCD.h>
-//M5UnitLCD display;  // default setting
-//M5UnitLCD display  ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5UnitGLASS2.h>
-//M5UnitGLASS2 display;  // default setting
-//M5UnitGLASS2 display ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5AtomDisplay.h>
-//M5AtomDisplay display;  // default setting
-//M5AtomDisplay display ( 320, 180 ); // width, height
+#include <M5Unified.h>
 
 static constexpr const int qsintab[256]={
     0x8000,0x80c9,0x8192,0x825b,0x8324,0x83ee,0x84b7,0x8580,
@@ -73,29 +55,31 @@ size_t scale = 1;
 
 void setup(void)
 {
-  display.init();
-  display.startWrite();
-  display.fillScreen(TFT_BLACK);
+  auto cfg = M5.config();
+  M5.begin(cfg);
+  
+  M5.Display.startWrite();
+  M5.Display.fillScreen(TFT_BLACK);
 
-  if (display.isEPD())
+  if (M5.Display.isEPD())
   {
-    display.setEpdMode(epd_mode_t::epd_fastest);
+    M5.Display.setEpdMode(epd_mode_t::epd_fastest);
   }
-  if (display.width() < display.height())
+  if (M5.Display.width() < M5.Display.height())
   {
-    display.setRotation(display.getRotation() ^ 1);
+    M5.Display.setRotation(M5.Display.getRotation() ^ 1);
   }
-  if (display.width() > 800)
+  if (M5.Display.width() > 800)
   {
     scale = 4;
   }
 
-  lcd_width  = display.width()  / scale;
-  lcd_height = display.height() / scale;
+  lcd_width  = M5.Display.width()  / scale;
+  lcd_height = M5.Display.height() / scale;
 
-  display.startWrite();
-  display.setColorDepth(8);
-  display.fillScreen(TFT_BLACK);
+  M5.Display.startWrite();
+  M5.Display.setColorDepth(8);
+  M5.Display.fillScreen(TFT_BLACK);
   f = 0;
 
   for (int i = 0; i < 8; ++i)
@@ -136,7 +120,7 @@ void loop(void)
   uint32_t dyx = (zoom * (( 0) * rcos - ( 1) * rsin) ) >> (20 - 8);
   uint32_t dyy = (zoom * (( 1) * rcos + ( 0) * rsin) ) >> (20 - 8);
 
-  display.waitDisplay();
+  M5.Display.waitDisplay();
   for (uint32_t y = 0; y < lcd_height; y++)
   {
     uint32_t ypos = y * scale;
@@ -166,7 +150,7 @@ void loop(void)
         {
           if (x)
           {
-            display.writeFillRectPreclipped(prev_x * scale, ypos, (x - prev_x) * scale, scale, colors[prev_color]);
+            M5.Display.writeFillRectPreclipped(prev_x * scale, ypos, (x - prev_x) * scale, scale, colors[prev_color]);
           }
           flg = diff;
           prev_x = x;
@@ -185,10 +169,10 @@ void loop(void)
     } while (++x < lcd_width);
     if (flg)
     {
-      display.writeFillRect(prev_x * scale, ypos, (x - prev_x) * scale, scale, colors[prev_color]);
+      M5.Display.writeFillRect(prev_x * scale, ypos, (x - prev_x) * scale, scale, colors[prev_color]);
     }
   }
-  display.display();
+  M5.Display.display();
   p_dxx = dxx;
   p_dxy = dxy;
   p_dyx = dyx;

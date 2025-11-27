@@ -22,7 +22,7 @@ void setup(void)
     Serial.println("RTC found.");
 
     M5.Display.println("Setup RTC Time");
-    M5.Rtc.setDateTime( { { 2021, 12, 31 }, { 12, 34, 56 } } );
+    M5.Rtc.setDateTime( { { 2025, 11, 27 }, { 20, 10, 56 } } );
     delay(1000);
 }
 

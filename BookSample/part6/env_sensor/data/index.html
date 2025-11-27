@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<style type="text/css">
+.title, .info { text-align : center; }
+.title { font-size: 24pt; }
+.info { font-size: 48pt; }
+.warning { color: black; background-color : yellow; }
+.error { color : white; background-color: red; }
+</style>
+<title>環境計</title>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <p class="title">気温</p>
+      <p id="temperature" class="info"></p>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <p class="title">湿度</p>
+      <p id="humidity" class="info"></p>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <p class="title">気圧</p>
+      <p id="pressure" class="info"></p>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <p class="title">空気</p>
+      <p class="info"><span id="air"></span></p>
+    </div>
+  </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+<script type="text/javascript">
+$(function() {
+  setInterval(function() {
+    $.getJSON(
+      "/json",
+      function(data, status) {
+        $('#temperature').html(data.temperature + "℃");
+        $('#humidity').html(data.humidity + "％");
+        $('#pressure').html(data.pressure + "hPa");
+        if (data.air < 0.5) {
+          $('#air').html('正常');
+          $('#air').removeClass('warning');
+          $('#air').removeClass('error');
+        }
+        else if (data.air < 1.0) {
+          $('#air').html('注意');
+          $('#air').addClass('warning');
+          $('#air').removeClass('error');
+        }
+        else {
+          $('#air').html('異常');
+          $('#air').removeClass('warning');
+          $('#air').addClass('error');
+        }
+      }
+    );
+  }, 1000);
+})
+</script>
+</body>
+</html>

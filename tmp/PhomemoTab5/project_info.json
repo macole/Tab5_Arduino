@@ -1,0 +1,68 @@
+{
+  "project_name": "PhomemoTab5",
+  "version": "1.0.0",
+  "description": "Phomemo M02サーマルプリンター用Arduinoライブラリ - Tab5対応版",
+  "author": "DX推進エンジニア",
+  "created_date": "2024-11-15",
+  "hardware_requirements": [
+    "ESP32開発ボード (推奨)",
+    "Arduino Nano 33 BLE (代替)",
+    "Phomemo M02プリンター"
+  ],
+  "features": [
+    "Bluetooth経由でのプリンター接続",
+    "テキスト印刷（複数フォントサイズ対応）",
+    "ビットマップ画像印刷",
+    "QRコード印刷",
+    "印刷設定調整（濃度、位置合わせ等）",
+    "プリンター状態監視",
+    "豊富なコマンドライン操作",
+    "レシート・ラベル印刷テンプレート"
+  ],
+  "files": [
+    {
+      "name": "PhomemoTab5.ino",
+      "description": "基本版メインプログラム - シンプルな実装"
+    },
+    {
+      "name": "PhomemoAdvanced.h",
+      "description": "拡張ライブラリヘッダー - 詳細機能定義"
+    },
+    {
+      "name": "PhomemoAdvanced.cpp",
+      "description": "拡張ライブラリ実装 - ESC/POSコマンド完全対応"
+    },
+    {
+      "name": "PhomemoTab5Example.ino",
+      "description": "完全版サンプル - 全機能使用例とセットアップガイド"
+    },
+    {
+      "name": "README.md",
+      "description": "プロジェクト説明書 - セットアップ手順とAPI リファレンス"
+    }
+  ],
+  "usage_examples": [
+    "製造ライン情報の印刷",
+    "品質管理ラベルの作成",
+    "進捗レポートの出力",
+    "作業指示書の印刷",
+    "バーコード・QRコードラベル作成"
+  ],
+  "supported_commands": [
+    "text:<message> - テキスト印刷",
+    "large:<message> - 大きなフォントで印刷",
+    "center:<message> - 中央寄せ印刷",
+    "density:<1-5> - 印刷濃度設定",
+    "qr:<data> - QRコード印刷",
+    "test - テストページ印刷",
+    "receipt - サンプルレシート印刷",
+    "status - プリンター状態表示"
+  ],
+  "references": [
+    "https://github.com/K0IN/Phomemo-M02-Web",
+    "https://github.com/vivier/phomemo-tools",
+    "https://github.com/theacodes/phomemo_m02s"
+  ],
+  "license": "MIT License",
+  "notes": "富士電機DX推進業務での製造ライン効率化に活用可能"
+}
