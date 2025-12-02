@@ -159,3 +159,17 @@ void loop() {
   - `LV_COLOR_DEPTH 16`, `LV_COLOR_16_SWAP 1`, `LV_TICK_CUSTOM 1`（`millis()`）、`LV_MEM_CUSTOM 1`
 
 以上を押さえると、LVGLの「描く（バッファ）→転送（flush）→表示」「入力（indev）→イベント処理」の流れが理解できます。
+
+## 📄 ライセンス
+
+このプログラムはMITライセンスの下で公開されています。
+
+Copyright (c) 2025 macole
+
+詳細はプロジェクトルートの`LICENSE`ファイルを参照してください。
+
+---
+
+**作成日**: 2025年11月  
+**対象デバイス**: M5Stack Tab5  
+**動作確認**: ✅ 正常動作確認済み

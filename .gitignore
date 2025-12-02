@@ -3,5 +3,21 @@
 *.elf
 *.bin
 .gitignore
-temp/
+
+# VS Code / Cursor ワークスペースファイル
+*.code-workspace
+
+# 一時ファイル・フォルダ
+tmp/
+tmp
+
+# ライブラリ・アセット
+libraries/
+Assets/
+
+# 認証情報・設定ファイル（Gitにコミットしない）
+**/secrets.h
+**/config.h
+**/*_secrets.h
+**/*_config.h
 

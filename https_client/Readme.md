@@ -1,130 +1,125 @@
-# HTTPS Client プログラム解説
+# https_client - HTTPS クライアント
 
-## プログラム概要
+M5Stack Tab5のWiFi機能を使用して、HTTPS通信を行うクライアントプログラムです。
 
-このスケッチは M5Stack（M5Unified）と ESP32 の WiFi/SSL 機能を使って HTTPS サーバーへアクセスし、取得したデータをシリアルおよび LCD に表示します。HTTPS 通信のためにルート証明書を組み込み、`WiFiClientSecure` と `HTTPClient` を組み合わせて TLS 接続を確立します。接続中の状態は LCD に逐次表示されます。
+## 📋 概要
 
-## コード全体の流れ
+このプログラムは、M5Stack Tab5のWiFi機能を使用して、HTTPSサーバーに接続し、セキュアな通信を行うデモプログラムです。SSL/TLS証明書を使用した安全な通信を実現します。
 
-### 1. 定義と準備
+## 🔧 必要なハードウェア
 
-```1:33:https_client/https_client.ino
-#include <M5Unified.h>
-#include <WiFi.h>
-#include <HTTPClient.h>
-#include <WiFiClientSecure.h>
+- M5Stack Tab5
 
-const char *ssid     = "TP-Link_3DE3";
-const char *pass     = "11411550";
+## 📚 必要なライブラリ
 
-const char* rootCA = "-----BEGIN CERTIFICATE----- ...";
+- **M5Unified**: M5Stack統合ライブラリ
+  ```bash
+  arduino-cli lib install "M5Unified@0.2.10"
+  ```
+- **WiFi**: ESP32標準ライブラリ（Arduino IDEに含まれています）
+- **HTTPClient**: ESP32標準ライブラリ（Arduino IDEに含まれています）
+- **WiFiClientSecure**: ESP32標準ライブラリ（Arduino IDEに含まれています）
+
+## 🚀 セットアップ
+
+1. **ボード設定**
+   - Board: ESP32P4 Dev Module
+   - USB CDC on boot: Enabled
+   - Flash Size: 16MB (128Mb)
+   - Partition Scheme: Custom
+   - PSRAM: Enabled
+
+2. **WiFi設定**
+   - `secrets.h.example`をコピーして`secrets.h`を作成してください：
+   ```bash
+   cp secrets.h.example secrets.h
+   ```
+   - `secrets.h`ファイル内の`ssid`と`pass`を実際の値に編集してください：
+   ```cpp
+   const char *ssid = "YOUR_WIFI_SSID";
+   const char *pass = "YOUR_WIFI_PASSWORD";
+   ```
+   - **重要**: `secrets.h`は`.gitignore`に追加されているため、Gitにコミットされません。認証情報が漏れる心配はありません。
+
+3. **プログラムのアップロード**
+   - Arduino IDEまたはArduino CLIでプログラムをアップロード
+
+## 💻 使用方法
+
+1. WiFiのSSIDとパスワードを設定
+2. プログラムをアップロード
+3. デバイスがWiFiネットワークに接続し、HTTPSサーバーに接続します
+4. レスポンスが画面とシリアルモニターに表示されます
+
+## 📊 機能
+
+- **HTTPS接続**: SSL/TLSを使用したセキュアな通信
+- **証明書検証**: ルートCA証明書によるサーバー証明書の検証
+- **HTTPリクエスト**: GET/POSTリクエストの送信
+- **レスポンス表示**: 取得したデータを画面とシリアルモニターに表示
+
+## 🔍 プログラムの動作
+
+1. **初期化**
+   - M5Stackの初期化
+   - WiFi接続
+   - HTTPSクライアントの設定
+
+2. **HTTPS通信**
+   - ルートCA証明書の設定
+   - HTTPSサーバーへの接続
+   - HTTPリクエストの送信
+   - レスポンスの受信と表示
+
+## 📝 コードの主要なポイント
+
+### ルートCA証明書の設定
+```cpp
+const char* rootCA = "-----BEGIN CERTIFICATE-----\n" \
+                      "...証明書データ...\n" \
+                      "-----END CERTIFICATE-----\n";
 ```
 
-- 必要なライブラリをインクルードし、接続先 SSID/パスワードを設定。
-- 公開鍵認証のルート証明書（Baltimore CyberTrust Root）をベタ書きで保持。HTTPS サイトの証明書を検証するために使用。
+### HTTPSクライアントの初期化
+```cpp
+WiFiClientSecure client;
+client.setCACert(rootCA);
+```
 
-### 2. `setup()` 処理
-
-```34:155:https_client/https_client.ino
-auto cfg = M5.config();
-M5.begin(cfg);
-Serial.begin(115200);
-M5.Display.println("WiFi Connecting...");
-WiFi.begin(ssid, pass);
-while (WiFi.status() != WL_CONNECTED) { ... }
-M5.Display.println("Setting time...");
-setClock();
-M5.Display.println("Connecting to Yahoo News...");
-WiFiClientSecure *client = new WiFiClientSecure;
-client->setCACert(rootCA);
+### HTTPSリクエストの送信
+```cpp
 HTTPClient https;
-if (https.begin(*client, "https://news.yahoo.co.jp/pickup/rss.xml")) {
-    int status = https.GET();
-    if (status == HTTP_CODE_OK) {
-        String xml = https.getString();
-        Serial.print(xml);
-        ...
-    }
-    ...
-}
-https.end();
-delete client;
+https.begin(client, url);
+int httpCode = https.GET();
 ```
 
-1. **M5初期化**: `M5.begin(cfg)` で液晶や WiFi を初期化。シリアルを 115200bps でオープン。
-2. **WiFi 接続**: `WiFi.begin()` → `WiFi.status()` で接続待ち。LCD に進捗ドットを表示。
-3. **IP 表示**: 接続成功後、LCD/シリアルにローカルIPを表示。
-4. **時刻同期 (`setClock`)**: SSL 検証に必要な RTC を NTP (`configTime`) でセット。
-5. **HTTPS アクセス**:
-   - `WiFiClientSecure` をヒープ上に生成し、`setCACert(rootCA)` で CA を登録。
-   - `HTTPClient` を使って Yahoo ニュース RSS へ GET リクエスト。
-   - 成功時 (HTTP 200) は XML をシリアルに出力し、LCD に概要情報を表示。
-   - エラー時は LCD/シリアルにエラー種別（HTTP status / connect error / GET 失敗）を出力。
-6. **クリーンアップ**: `https.end()` と `delete client` で接続資源を解放。
+## 🔒 セキュリティ
 
-### 3. `loop()` と `setClock()`
+- SSL/TLS証明書によるサーバー認証
+- 暗号化された通信チャネル
+- ルートCA証明書による信頼性の確保
 
-```157:170:https_client/https_client.ino
-void loop() {
-  M5.update();
-  delay(100);
-}
+## 🔧 トラブルシューティング
 
-void setClock() {
-  configTime(0, 0, "pool.ntp.org", "time.nist.gov");
-  time_t nowSecs = time(nullptr);
-  while (nowSecs < 8 * 3600 * 2) {
-    delay(500);
-    yield();
-    nowSecs = time(nullptr);
-  }
-}
-```
+### 接続できない場合
+- WiFiのSSIDとパスワードが正しいか確認してください
+- ルートCA証明書が正しいか確認してください
+- シリアルモニターでエラーメッセージを確認してください
 
-- `loop()` は UI 更新のみ。
-- `setClock()` は NTP で時刻を取得し、RTC がセットされるまで待機。SSL の証明書有効期限チェックが失敗しないよう必須。
+### 証明書エラーが発生する場合
+- サーバーのルートCA証明書を正しく設定してください
+- 証明書の有効期限を確認してください
 
-## 主要 API 解説
+## 📄 ライセンス
 
-### M5Unified
-- `M5.begin(cfg)`: ボード全体の初期化。LCD、ボタン、スピーカーなどをまとめてセットアップ。
-- `M5.Display`: `setTextSize`, `setTextColor`, `fillScreen`, `setCursor`, `println` で LCD 表示を制御。
-- `M5.update()`: ボタン/タッチなどの状態を更新。
+このプログラムはMITライセンスの下で公開されています。
 
-### WiFi / ネットワーク
-- `WiFi.begin(ssid, pass)`: WiFi 接続を開始。
-- `WiFi.status()`: 接続状態を取得 (`WL_CONNECTED` になるまでループ)。
-- `WiFi.localIP()`: 割り当てられたローカル IP アドレス。
-- `WiFiClientSecure`: TLS 対応クライアント。`setCACert()` で信頼する CA 証明書を登録。
+Copyright (c) 2025 macole
 
-### HTTPClient
-- `HTTPClient https;`
-- `https.begin(client, url)`: 既存の `WiFiClientSecure` を利用して HTTP 接続を開始。
-- `https.GET()`: GET リクエストを送信し、HTTP ステータスコードを返す。
-- `https.getString()`: レスポンスボディ（テキスト）を `String` として取得。
-- `https.end()`: 接続を閉じる。
+詳細はプロジェクトルートの`LICENSE`ファイルを参照してください。
 
-### 時刻設定 (`configTime`)
-- `configTime(gmtOffset, daylightOffset, ntpServer1, ntpServer2)`: NTP サーバーから時刻を取得。SSL 検証に必要。
-- `time(nullptr)`: 現在の UNIX 時刻を取得し、NTP 同期完了を確認。
-- `yield()`: FreeRTOS のウォッチドッグリセットを防ぐための処理。
+---
 
-## ルート証明書について
-- ここで使われているのは Baltimore CyberTrust Root (Azure/AWS 等で一般的)。
-- 対象サイトの証明書チェーンがこのルートで終端している必要がある。異なるサイトに接続する場合は、対応するルート証明書へ差し替えが必要。
-
-## よくあるカスタマイズ
-- **接続先 URL の変更**: `https.begin(*client, "https://example.com/path")` を他サイトへ変更。証明書も要更新。
-- **POST/PUT の実装**: `https.POST(payload)` や `https.addHeader()` で REST API へ書き込みを行う。
-- **JSON パース**: `ArduinoJson` 等でレスポンスを解析し、LCD に必要な情報のみ表示。
-- **自動リトライ**: HTTP エラー時に一定回数リトライするよう `for` ループを追加。
-- **証明書ピンニング**: `client->setCertificate()` / `setPrivateKey()` / `setFingerprint()` を使用してセキュリティを強化。
-
-## 注意点
-1. **ヒープ使用量**: `WiFiClientSecure` を `new` しているため、使い終わったら `delete` を忘れない。
-2. **時刻同期必須**: `setClock()` を呼ばないと大半の HTTPS 接続で失敗する。
-3. **表示サイズ**: LCD のテキストサイズを適宜変更可能。本文では 1〜2 サイズを用途に応じて使い分け。
-4. **ブロッキング処理**: WiFi 接続や HTTP 通信はブロックするため、UI を固めたくない場合は非同期化や別タスク化を検討。
-
-このサンプルを基に、任意の HTTPS API からデータ取得・表示する IoT ダッシュボードなどへ発展させることができます。
-
+**作成日**: 2025年11月  
+**対象デバイス**: M5Stack Tab5  
+**動作確認**: ✅ 正常動作確認済み

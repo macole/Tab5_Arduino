@@ -153,3 +153,16 @@ https://watako-lab.com/wp-content/uploads/2019/01/rot_zAxis.png
 左上：０、０
 右下： 720x1280
 
+## 📄 ライセンス
+
+このプログラムはMITライセンスの下で公開されています。
+
+Copyright (c) 2025 macole
+
+詳細はプロジェクトルートの`LICENSE`ファイルを参照してください。
+
+---
+
+**作成日**: 2025年11月  
+**対象デバイス**: M5Stack Tab5  
+**動作確認**: ✅ 正常動作確認済み

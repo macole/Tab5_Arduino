@@ -18,10 +18,9 @@
 #define SDIO2_D3  GPIO_NUM_8
 #define SDIO2_RST GPIO_NUM_15
 
-//const char *ssid     = "ssid";
-//const char *password = "password";
-const char *ssid     = "TP-Link_3DE3";
-const char *password = "11411550";
+// WiFi認証情報は secrets.h から読み込みます
+// secrets.h.example をコピーして secrets.h を作成し、実際のSSIDとパスワードを設定してください
+#include "secrets.h"
 
 void setup(void)
 {

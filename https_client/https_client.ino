@@ -3,10 +3,9 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 
-//const char* ssid = "your_ssid";
-//const char* pass = "your_pass";
-const char *ssid     = "TP-Link_3DE3";
-const char *pass = "11411550";
+// WiFi認証情報は secrets.h から読み込みます
+// secrets.h.example をコピーして secrets.h を作成し、実際のSSIDとパスワードを設定してください
+#include "secrets.h"
 
 const char* rootCA =
 "-----BEGIN CERTIFICATE-----\n" \

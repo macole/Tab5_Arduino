@@ -356,8 +356,13 @@ if (qrcode.getDecodeReadyStatus() == 1) {
 
 ## 📄 ライセンス
 
-このプログラムは教育・学習目的で提供されています。  
-M5UnitQRCodeライブラリはM5Stack Technology CO LTDの著作物です。
+このプログラムはMITライセンスの下で公開されています。
+
+Copyright (c) 2025 macole
+
+詳細はプロジェクトルートの`LICENSE`ファイルを参照してください。
+
+**注意**: M5UnitQRCodeライブラリはM5Stack Technology CO LTDの著作物です。各ライブラリのライセンスを確認してください。
 
 ---
 

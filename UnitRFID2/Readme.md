@@ -161,7 +161,11 @@ if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
 
 ## 📄 ライセンス
 
-このプログラムは教育・学習目的で提供されています。
+このプログラムはMITライセンスの下で公開されています。
+
+Copyright (c) 2025 macole
+
+詳細はプロジェクトルートの`LICENSE`ファイルを参照してください。
 
 ---
 

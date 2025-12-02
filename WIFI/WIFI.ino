@@ -11,8 +11,9 @@
 #define SDIO2_D3  GPIO_NUM_8
 #define SDIO2_RST GPIO_NUM_15
 
-const char *ssid     = "SSID";
-const char *password = "PASSWORD";
+// WiFi認証情報は secrets.h から読み込みます
+// secrets.h.example をコピーして secrets.h を作成し、実際のSSIDとパスワードを設定してください
+#include "secrets.h"
 
 void setup()
 {
