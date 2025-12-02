@@ -17,7 +17,33 @@ M5Stack Tab5のWiFi機能を使用して、SNTP（Simple Network Time Protocol�
   arduino-cli lib install "M5Unified@0.2.10"
   ```
 - **WiFi**: ESP32標準ライブラリ（Arduino IDEに含まれています）
-- **esp_sntp**: ESP32標準ライブラリ（Arduino IDEに含まれています）
+- **esp_sntp / sntp**: ESP32標準ライブラリ（Arduino IDEに含まれています）
+
+### esp_sntp.h と sntp.h の違い
+
+このスケッチでは、`SNTP/SNTP.ino` の先頭で次の2つのヘッダーファイルをインクルードしています。
+
+```cpp
+#include <esp_sntp.h>
+#include <sntp.h>
+```
+
+それぞれの役割と、なぜ両方を使っているかは次の通りです。
+
+- **esp_sntp.h**
+  - ESP-IDF（ESP32の公式フレームワーク）側で提供されている、SNTP 用の**高レベルラッパーAPI**です。
+  - このスケッチで使用している `configTzTime()` などの「タイムゾーンとNTPサーバーをまとめて設定する便利関数」は `esp_sntp.h` 側で宣言されています。
+- **sntp.h**
+  - ESP32内部で使われている lwIP スタックの **低レベルSNTPライブラリ**です。
+  - SNTP同期状態を表す `sntp_sync_status_t` や、その状態を取得する `sntp_get_sync_status()` などの関数・定数がこちらで定義されています。
+
+このスケッチでは、
+
+- **NTPサーバーの設定とタイムゾーン設定**には `configTzTime()`（`esp_sntp.h`）を使用し、
+- **「同期完了するまで待つ処理」には `sntp_get_sync_status()`（`sntp.h`）を使用**
+
+しているため、**両方のヘッダーファイルをインクルードする必要があります。**  
+片方だけでは、便利な高レベルAPIまたは同期状態の取得のいずれかが不足してしまうためです。
 
 ## 🚀 セットアップ
 
