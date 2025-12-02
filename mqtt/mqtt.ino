@@ -18,15 +18,11 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-// Configure the name and password of the connected wifi and your MQTT Serve
-// host.  配置所连接wifi的名称、密码以及你MQTT服务器域名
-//const char* ssid        = "Explore-F";
-//const char* password    = "xingchentansuo123";
-//const char* mqtt_server = "mqtt.m5stack.com";
-
-const char* ssid        = "TP-Link_3DE3";
-const char* password    = "11411550";
-const char* mqtt_server = "mqtt.m5stack.com";
+// WiFi認証情報とMQTTサーバーは secrets.h から読み込みます
+// secrets.h.example をコピーして secrets.h を作成し、実際のSSID、パスワード、MQTTサーバーを設定してください
+// Configure the name and password of the connected wifi and your MQTT Server host.
+// 配置所连接wifi的名称、密码以及你MQTT服务器域名
+#include "secrets.h"
 
 unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE (50)
