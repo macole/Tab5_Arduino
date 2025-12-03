@@ -145,6 +145,16 @@ Tab5_Arduino/
 - ESP32-P4 ボードサポート
 - M5Stack Tab5 デバイス
 
+### Cursor/VS CodeでのIntelliSense設定
+
+CursorやVS Codeでコード補完とエラー検出を有効にするには、`.vscode/c_cpp_properties.json`が自動的に作成されています。もしインクルードエラーが表示される場合は、以下の手順を実行してください：
+
+1. **Cursor/VS Codeを再起動**するか、コマンドパレット（`Cmd+Shift+P`）から `C/C++: Reset IntelliSense Database` を実行
+2. Arduino IDEでライブラリをインストールした場合、`~/Library/Arduino15/libraries/`にライブラリが配置されます
+3. プロジェクト内の`libraries/`フォルダのライブラリも自動的に認識されます
+
+**注意**: `.vscode/`フォルダはプロジェクト固有の設定を含むため、必要に応じてGitにコミットしてください。
+
 ### ライブラリのインストール
 ```bash
 # M5Unified ライブラリ（必須）

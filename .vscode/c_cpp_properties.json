@@ -1,0 +1,63 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/libraries/**",
+                "${workspaceFolder}/libraries/M5Unified/src/**",
+                "${workspaceFolder}/libraries/M5Unified/src/utility/**",
+                "${workspaceFolder}/libraries/M5GFX/src/**",
+                "${workspaceFolder}/libraries/M5GFX/src/lgfx/**",
+                "${workspaceFolder}/libraries/M5GFX/src/lgfx/v1/**",
+                "${workspaceFolder}/libraries/LovyanGFX/src/**",
+                "${workspaceFolder}/libraries/FastLED/src/**",
+                "${workspaceFolder}/libraries/ESP8266Audio/src/**",
+                "${workspaceFolder}/libraries/lvgl/src/**",
+                "${workspaceFolder}/libraries/M5UnitQRCode/src/**",
+                "${workspaceFolder}/libraries/M5UnitSynth/src/**",
+                "${workspaceFolder}/libraries/MFRC522_I2C/src/**",
+                "${workspaceFolder}/libraries/NimBLE-Arduino/src/**",
+                "${workspaceFolder}/libraries/PubSubClient/src/**",
+                "${env:HOME}/Library/Arduino15/packages/esp32/hardware/esp32/*/cores/esp32/**",
+                "${env:HOME}/Library/Arduino15/packages/esp32/hardware/esp32/*/tools/sdk/include/**",
+                "${env:HOME}/Library/Arduino15/packages/esp32/hardware/esp32/*/tools/sdk/esp32/include/**",
+                "${env:HOME}/Library/Arduino15/packages/esp32/hardware/esp32/*/libraries/**",
+                "${env:HOME}/Library/Arduino15/libraries/**",
+                "${env:HOME}/Documents/Arduino/libraries/**"
+            ],
+            "defines": [
+                "ARDUINO=10819",
+                "ARDUINO_ESP32_DEV",
+                "ARDUINO_ARCH_ESP32",
+                "ESP32",
+                "F_CPU=240000000L",
+                "ARDUINO_ESP32P4_DEV",
+                "ARDUINO_ARCH_ESP32P4",
+                "ESP32P4",
+                "__ets__",
+                "ICACHE_FLASH",
+                "F_CPU=240000000L",
+                "LWIP_IPV4=1",
+                "LWIP_IPV6=0",
+                "ARDUINO_BOARD=\"ESP32P4 Dev Module\"",
+                "ARDUINO_VARIANT=\"esp32p4\"",
+                "ARDUINO_PARTITION=\"custom\""
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${workspaceFolder}/libraries",
+                    "${env:HOME}/Library/Arduino15/packages/esp32/hardware/esp32"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}
+
