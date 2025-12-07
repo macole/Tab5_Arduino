@@ -36,8 +36,6 @@ Tab5_Arduino/
 ├── HEX_SK6812/                  # Unit HEX LEDストリップ制御
 │   ├── HEX_SK6812.ino
 │   └── Readme.md
-├── https_client/                # ネットワーク用シークレット（Tab5_Network と共有）
-│   └── secrets.h
 ├── IMU/                         # IMUセンサー（加速度・ジャイロ）
 │   ├── IMU.ino
 │   └── Readme.md
@@ -69,9 +67,13 @@ Tab5_Arduino/
 ├── SD/                          # SDカード機能
 │   ├── SD.ino
 │   └── Readme.md
+├── Serial/                      # シリアル通信サンプル
+│   ├── Serial.ino
+│   └── Readme.md
 ├── SNTP/                        # SNTP時刻同期（ネットワーク設定は Tab5_Network 参照）
 │   ├── SNTP.ino
 │   ├── Readme.md
+│   ├── secrets.h
 │   └── secrets.h.example
 ├── Speaker/                     # スピーカーテスト
 │   ├── Speaker.ino
@@ -113,10 +115,11 @@ Tab5_Arduino/
 ├── UnitRFID2_UID/               # RFID UID表示（シンプル版）
 │   ├── UnitRFID2_UID.ino
 │   └── Readme.md
-├── USB_DeviceMode/              # USB デバイスモード（キーボードなど）
-│   └── USB_DeviceMode.ino
-├── USB_Mouse/                   # USB マウスデモ
-│   ├── USB_Mouse.ino
+├── USB_Keyboard_Host/           # USB キーボード入力（Host モード）
+│   ├── USB_Keyboard_Host.ino
+│   └── Readme.md
+├── USB_Mouse_Host/              # USB マウス入力（Host モード）
+│   ├── USB_Mouse_Host.ino
 │   └── Readme.md
 ├── Docs/                        # ドキュメント・スクリプト
 │   ├── Arduino_Basic_Syntax_Guide.md
@@ -124,7 +127,8 @@ Tab5_Arduino/
 │   ├── Manufacturing_Arduino_Samples.md
 │   ├── USB_Application_Guide.md
 │   ├── compile.sh              # コンパイルスクリプト
-│   └── monitor.sh              # シリアルモニタースクリプト
+│   ├── monitor.sh              # シリアルモニタースクリプト
+│   └── partitions.csv          # パーティション設定ファイル
 ├── LICENSE                      # ライセンスファイル
 └── Readme.md                    # このファイル
 ```
@@ -199,6 +203,8 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 
 ### 📊 動作確認済みプログラム一覧（全30個）
 
+**注意**: ネットワーク系サンプル（WiFi, HTTPS, MQTT など）や GUI 系サンプル（LVGL）は、それぞれ `Tab5_Network` / `Tab5_GUI` リポジトリに分離されています。
+
 #### 基本機能（2個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
@@ -231,21 +237,21 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 | 15 | GameOfLife | ✅ 完了 | ライフゲーム |
 | 16 | MP3Player | ✅ 完了 | MP3プレイヤー |
 
-#### システム・通信（7個）
+#### システム・通信（6個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
 | 17 | Power | ✅ 完了 | バッテリー管理・監視 |
 | 18 | RTC | ✅ 完了 | リアルタイムクロック |
 | 19 | SD | ✅ 完了 | SDカード機能 |
-| 20 | WIFI | ✅ 完了 | WiFi接続デモ |
-| 21 | https_client | ✅ 完了 | HTTPS クライアント |
-| 22 | SNTP | ✅ 完了 | SNTP時刻同期 |
-| 23 | MQTT | ✅ 完了 | MQTT通信 |
+| 20 | SNTP | ✅ 完了 | SNTP時刻同期 |
+| 21 | BLE | ✅ 完了 | BLE 基本サンプル |
+| 22 | Serial | ✅ 完了 | シリアル通信サンプル |
 
-#### GUI・LVGL（1個）
+#### USB Host（2個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
-| 24 | **tab5_lvgl** | ✅ **完了** | **LVGL GUI デモ（拡張版）** |
+| 23 | USB_Keyboard_Host | ✅ 完了 | USB キーボード入力（EspUsbHost） |
+| 24 | USB_Mouse_Host | ✅ 完了 | USB マウス入力（EspUsbHost） |
 
 #### Unit系デバイス（6個）
 | No. | プログラム名 | 状態 | 主要機能 |
@@ -339,15 +345,16 @@ MP3ファイルの再生機能を提供するプレイヤー。
 - 再生制御（再生/停止/一時停止）
 - 音量調整
 
-#### https_client - HTTPS クライアント
-**ファイル**: `https_client/https_client.ino`
+#### Serial - シリアル通信サンプル
+**ファイル**: `Serial/Serial.ino`
 
-HTTPS通信を行うクライアントプログラム。
+M5Unified 対応のシリアル通信サンプル。LED制御とディスプレイ表示を組み合わせた基本サンプル。
 
 **機能**:
-- HTTPS接続
-- セキュアな通信
-- サーバーとのデータ交換
+- シリアル通信（115200bps）
+- LED制御（GPIO 3）
+- ディスプレイ出力
+- M5Unified ライブラリ対応
 
 #### SNTP - SNTP時刻同期
 **ファイル**: `SNTP/SNTP.ino`
@@ -359,15 +366,27 @@ SNTPプロトコルを使用した時刻同期機能。
 - 自動時刻同期
 - 正確な時刻表示
 
-#### MQTT - MQTT通信
-**ファイル**: `MQTT/MQTT.ino`
+#### USB_Keyboard_Host - USB キーボード入力
+**ファイル**: `USB_Keyboard_Host/USB_Keyboard_Host.ino`
 
-MQTTプロトコルを使用したIoT通信機能。
+EspUsbHost ライブラリを使用した USB キーボード入力サンプル。USB Type-A ポートにキーボードを接続して入力を処理します。
 
 **機能**:
-- MQTTブローカーへの接続
-- トピックの購読・発行
-- IoTデバイス間通信
+- USB キーボード入力の受信
+- 文字入力の画面・シリアル表示
+- 修飾キー（Shift, Ctrl, Alt など）の検出
+- 特殊キー（Enter, Backspace など）の処理
+
+#### USB_Mouse_Host - USB マウス入力
+**ファイル**: `USB_Mouse_Host/USB_Mouse_Host.ino`
+
+EspUsbHost ライブラリを使用した USB マウス入力サンプル。USB Type-A ポートにマウスを接続して入力を処理します。
+
+**機能**:
+- USB マウス入力の受信
+- マウス移動量の画面表示（カーソル表示）
+- ボタンクリックの検出
+- マウス接続状態の表示
 
 #### TextSample - テキストサンプル
 **ファイル**: `TextSample/TextSample.ino`
@@ -379,22 +398,6 @@ MQTTプロトコルを使用したIoT通信機能。
 - テキストスタイルのデモ
 - 文字列操作の例
 
-#### tab5_lvgl - LVGL GUI デモ
-**ファイル**: `tab5_lvgl/tab5_lvgl.ino`
-
-LVGLを使用した高機能GUIデモ。Square Line Studioプロジェクト付き。
-
-**機能**:
-- LVGL GUI フレームワーク
-- タッチ操作
-- スライダー・ボタン・アーク表示
-- 自動アニメーション
-- 明度調整
-
-**特別な設定**:
-- カスタムパーティション設定
-- PSRAM使用
-- ソフトウェア回転
 
 ## 🛠️ 開発ツール
 
