@@ -19,10 +19,16 @@
 
 ## 📁 プロジェクト構造
 
+このリポジトリは「Arduino スケッチ単体で Tab5 の各機能を確認する」ことを目的としたサンプル集です。  
+GUI（LVGL ベース）やネットワーク系のより高度なサンプルは、それぞれ `Tab5_GUI` / `Tab5_Network` リポジトリに分離しました。
+
 ```
 Tab5_Arduino/
 ├── BarGraph/                    # バーグラフアニメーション
 │   ├── BarGraph.ino
+│   └── Readme.md
+├── BLE/                         # BLE 基本サンプル
+│   ├── BLE.ino
 │   └── Readme.md
 ├── GameOfLife/                  # ライフゲーム
 │   ├── GameOfLife.ino
@@ -30,26 +36,23 @@ Tab5_Arduino/
 ├── HEX_SK6812/                  # Unit HEX LEDストリップ制御
 │   ├── HEX_SK6812.ino
 │   └── Readme.md
-├── https_client/                # HTTPS クライアント
-│   ├── https_client.ino
-│   ├── Readme.md
-│   └── secrets.h.example
+├── https_client/                # ネットワーク用シークレット（Tab5_Network と共有）
+│   └── secrets.h
 ├── IMU/                         # IMUセンサー（加速度・ジャイロ）
 │   ├── IMU.ino
 │   └── Readme.md
 ├── IMU_BallBox/                 # IMUボール物理シミュレーション
 │   ├── IMU0_BallBox.ino
 │   └── Readme.md
-├── M5Unified/                   # 基本的なHello World
+├── LongTextScroll/              # 長いテキストのスクロール表示
+│   ├── LongTextScroll.ino
+│   └── Readme.md
+├── M5Unified/                   # 基本的な Hello World
 │   ├── M5Unified.ino
 │   └── Readme.md
 ├── MIC/                         # マイク録音・再生
 │   ├── MIC.ino
 │   └── Readme.md
-├── MQTT/                        # MQTT通信
-│   ├── MQTT.ino
-│   ├── Readme.md
-│   └── secrets.h.example
 ├── MP3Player/                   # MP3プレイヤー
 │   ├── MP3Player.ino
 │   ├── README.md
@@ -60,13 +63,13 @@ Tab5_Arduino/
 ├── RTC/                         # リアルタイムクロック
 │   ├── RTC.ino
 │   └── Readme.md
-├── Scan/                        # スキャン系サンプル
+├── Scan/                        # スキャン系サンプル（一時ファイル置き場）
 │   └── tmp/
 │       └── Read.md
 ├── SD/                          # SDカード機能
 │   ├── SD.ino
 │   └── Readme.md
-├── SNTP/                        # SNTP時刻同期
+├── SNTP/                        # SNTP時刻同期（ネットワーク設定は Tab5_Network 参照）
 │   ├── SNTP.ino
 │   ├── Readme.md
 │   └── secrets.h.example
@@ -79,11 +82,6 @@ Tab5_Arduino/
 ├── Sprite/                      # スプライト（メモリ描画領域）デモ
 │   ├── Sprite.ino
 │   └── Readme.md
-├── tab5_lvgl/                   # LVGL GUI デモ（拡張版）
-│   ├── tab5_lvgl.ino
-│   ├── ui.h, ui.c              # LVGL UI定義
-│   ├── lv_conf.h               # LVGL設定ファイル
-│   └── SLS_Project/            # Square Line Studio プロジェクト
 ├── TextLogScroll/               # テキストログの縦スクロール
 │   ├── TextLogScroll.ino
 │   └── Readme.md
@@ -115,23 +113,16 @@ Tab5_Arduino/
 ├── UnitRFID2_UID/               # RFID UID表示（シンプル版）
 │   ├── UnitRFID2_UID.ino
 │   └── Readme.md
-├── WebServer/                   # Webサーバーデモ
-│   ├── webserver.ino
-│   ├── webserver.inox
-│   └── Readme.md
-├── Wifi/                        # WiFi接続・関連サンプル
-│   ├── WIFI.ino
-│   ├── Readme.md
-│   └── secrets.h.example
-├── Wifi_Antenna/                # WiFiアンテナテスト
-│   ├── Wifi_Antenna.ino
-│   └── Readme.md
-├── Wifi_Connect/                # WiFi接続テスト
-│   └── WIFI00_Connect.ino
-├── Wifi_Scan/                   # WiFiスキャン
-│   ├── WIFI01_Scan.ino
+├── USB_DeviceMode/              # USB デバイスモード（キーボードなど）
+│   └── USB_DeviceMode.ino
+├── USB_Mouse/                   # USB マウスデモ
+│   ├── USB_Mouse.ino
 │   └── Readme.md
 ├── Docs/                        # ドキュメント・スクリプト
+│   ├── Arduino_Basic_Syntax_Guide.md
+│   ├── GPIO_Application_Guide.md
+│   ├── Manufacturing_Arduino_Samples.md
+│   ├── USB_Application_Guide.md
 │   ├── compile.sh              # コンパイルスクリプト
 │   └── monitor.sh              # シリアルモニタースクリプト
 ├── LICENSE                      # ライセンスファイル
@@ -707,8 +698,8 @@ SOFTWARE.
 
 ---
 
-**作成日**: 2025年11月  
-**最終更新**: 2025年12月（全30プログラム動作確認完了、Unit系デバイス対応完了）  
+**作成日**: 2025年12月6日  
+**最終更新**: 2025年12月6日（全30プログラム動作確認完了、Unit系デバイス対応完了）  
 **対象デバイス**: M5Stack Tab5 (ESP32-P4)  
 **開発環境**: Arduino IDE / Arduino CLI  
 **動作確認**: 全30プログラム正常動作済み ✅

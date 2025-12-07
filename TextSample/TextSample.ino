@@ -2,21 +2,7 @@
 #include <M5GFX.h>
 M5GFX display;
 
-//#include <M5UnitOLED.h>
-//M5UnitOLED display; // default setting
-//M5UnitOLED display ( 21, 22, 400000 ); // SDA, SCL, FREQ
 
-//#include <M5UnitLCD.h>
-//M5UnitLCD display;  // default setting
-//M5UnitLCD display  ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5UnitGLASS2.h>
-//M5UnitGLASS2 display;  // default setting
-//M5UnitGLASS2 display ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5AtomDisplay.h>
-//M5AtomDisplay display;  // default setting
-//M5AtomDisplay display ( 320, 180 ); // width, height
 
 static constexpr char text0[] = "hello world";
 static constexpr char text1[] = "this";
@@ -61,33 +47,3 @@ void loop(void)
   ++count;
 }
 
-/*/
-
-/// Example without canvas
-void setup(void)
-{
-  display.begin();
-
-  if (display.isEPD())
-  {
-    display.setEpdMode(epd_mode_t::epd_fastest);
-    display.invertDisplay(true);
-    display.clear(TFT_BLACK);
-  }
-  if (display.width() < display.height())
-  {
-    display.setRotation(display.getRotation() ^ 1);
-  }
-
-  display.setTextSize((float)display.width() / 160);
-  display.setTextScroll(true);
-}
-
-void loop(void)
-{
-  static int count = 0;
-
-  display.printf("%04d:%s\r\n", count, text[count & 7]);
-  ++count;
-}
-//*/
