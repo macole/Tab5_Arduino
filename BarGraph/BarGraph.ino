@@ -2,21 +2,6 @@
 #include <M5Unified.h>
 M5GFX display;
 
-//#include <M5UnitOLED.h>
-//M5UnitOLED display; // default setting
-//M5UnitOLED display ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5UnitLCD.h>
-//M5UnitLCD display;  // default setting
-//M5UnitLCD display  ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5UnitGLASS2.h>
-//M5UnitGLASS2 display;  // default setting
-//M5UnitGLASS2 display ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-// #include <M5AtomDisplay.h>
-// M5AtomDisplay display;
-
 static constexpr size_t BAR_COUNT = 64;
 static int max_y[BAR_COUNT];
 static int prev_y[BAR_COUNT];

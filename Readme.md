@@ -9,128 +9,111 @@
 **対象デバイス**: M5Stack Tab5 (ESP32-P4)  
 **開発環境**: Arduino CLI + M5Unified ライブラリ  
 
-### 🎯 達成した目標
-
-1. **全30プログラムの動作確認完了** (100%)
-2. **技術的課題の完全解決** (100%)
-3. **包括的ドキュメントの作成** (100%)
-4. **開発環境の最適化** (100%)
-5. **Unit系デバイス対応** (100%)
-
 ## 📁 プロジェクト構造
 
 このリポジトリは「Arduino スケッチ単体で Tab5 の各機能を確認する」ことを目的としたサンプル集です。  
 GUI（LVGL ベース）やネットワーク系のより高度なサンプルは、それぞれ `Tab5_GUI` / `Tab5_Network` リポジトリに分離しました。
 
+### 関連リポジトリ
+
+- **Tab5_Arduino**（このリポジトリ）: 基本的なArduinoスケッチ集
+- **Tab5_GUI**: LVGLベースのGUIアプリケーション集
+- **Tab5_Network**: WiFi、HTTPS、MQTT、WebAPI、ChatGPT連携などのネットワーク関連プログラム集
+
 ```
 Tab5_Arduino/
-├── BarGraph/                    # バーグラフアニメーション
+├── .vscode/                      # IntelliSense設定（Cursor/VS Code用）
+│   ├── c_cpp_properties.json
+│   └── settings.json
+├── BarGraph/                     # バーグラフアニメーション
 │   ├── BarGraph.ino
 │   └── Readme.md
-├── BLE/                         # BLE 基本サンプル
-│   ├── BLE.ino
-│   └── Readme.md
-├── GameOfLife/                  # ライフゲーム
+├── GameOfLife/                   # ライフゲーム
 │   ├── GameOfLife.ino
 │   └── Readme.md
-├── HEX_SK6812/                  # Unit HEX LEDストリップ制御
+├── HEX_SK6812/                   # Unit HEX LEDストリップ制御
 │   ├── HEX_SK6812.ino
 │   └── Readme.md
-├── IMU/                         # IMUセンサー（加速度・ジャイロ）
+├── IMU/                          # IMUセンサー（加速度・ジャイロ）
 │   ├── IMU.ino
 │   └── Readme.md
-├── IMU_BallBox/                 # IMUボール物理シミュレーション
-│   ├── IMU0_BallBox.ino
+├── IMU_BallBox/                  # IMUボール物理シミュレーション
+│   ├── IMU_BallBox.ino
 │   └── Readme.md
-├── LongTextScroll/              # 長いテキストのスクロール表示
+├── LongTextScroll/               # 長いテキストのスクロール表示
 │   ├── LongTextScroll.ino
 │   └── Readme.md
-├── M5Unified/                   # 基本的な Hello World
+├── M5Unified/                    # 基本的な Hello World
 │   ├── M5Unified.ino
 │   └── Readme.md
-├── MIC/                         # マイク録音・再生
+├── MIC/                          # マイク録音・再生
 │   ├── MIC.ino
 │   └── Readme.md
-├── MP3Player/                   # MP3プレイヤー
+├── MP3Player/                    # MP3プレイヤー
 │   ├── MP3Player.ino
 │   ├── README.md
 │   └── SPECIFICATION.md
-├── Power/                       # バッテリー管理
+├── Power/                        # バッテリー管理
 │   ├── Power.ino
 │   └── Readme.md
-├── RTC/                         # リアルタイムクロック
+├── RTC/                          # リアルタイムクロック
 │   ├── RTC.ino
 │   └── Readme.md
-├── Scan/                        # スキャン系サンプル（一時ファイル置き場）
-│   └── tmp/
-│       └── Read.md
-├── SD/                          # SDカード機能
+├── SD/                           # SDカード機能
 │   ├── SD.ino
 │   └── Readme.md
-├── Serial/                      # シリアル通信サンプル
+├── Serial/                        # シリアル通信サンプル
 │   ├── Serial.ino
 │   └── Readme.md
-├── SNTP/                        # SNTP時刻同期（ネットワーク設定は Tab5_Network 参照）
-│   ├── SNTP.ino
-│   ├── Readme.md
-│   ├── secrets.h
-│   └── secrets.h.example
-├── Speaker/                     # スピーカーテスト
+├── Speaker/                      # スピーカーテスト
 │   ├── Speaker.ino
 │   └── Readme.md
-├── SpinTile/                    # スピンタイルアニメーション
+├── SpinTile/                     # スピンタイルアニメーション
 │   ├── SpinTile.ino
 │   └── Readme.md
-├── Sprite/                      # スプライト（メモリ描画領域）デモ
+├── Sprite/                       # スプライト（メモリ描画領域）デモ
 │   ├── Sprite.ino
 │   └── Readme.md
-├── TextLogScroll/               # テキストログの縦スクロール
+├── TextLogScroll/                # テキストログの縦スクロール
 │   ├── TextLogScroll.ino
 │   └── Readme.md
-├── TextSample/                  # テキストサンプル
+├── TextSample/                   # テキストサンプル
 │   ├── TextSample.ino
 │   └── Readme.md
-├── Touch/                       # タッチセンサー
+├── Touch/                        # タッチセンサー
 │   ├── Touch.ino
 │   └── Readme.md
-├── Touch_Multi/                 # マルチタッチ対応
+├── Touch_Multi/                  # マルチタッチ対応
 │   ├── Touch_Multi.ino
 │   └── Readme.md
-├── Touch_Test/                  # タッチテスト（クリアボタン付き）
+├── Touch_Test/                   # タッチテスト（クリアボタン付き）
 │   ├── Touch_Test.ino
 │   └── Readme.md
-├── UnitByteSwitch/              # 8スイッチ・LED制御
+├── UnitByteSwitch/               # 8スイッチ・LED制御
 │   ├── UnitByteSwitch.ino
 │   ├── unit_byte.cpp
-│   └── unit_byte.hpp
-├── UnitQRCode_i2c/              # QRコード読み取り
+│   ├── unit_byte.hpp
+│   └── Readme.md
+├── UnitQRCode_i2c/               # QRコード読み取り
 │   ├── UnitQRCode_i2c.ino
 │   └── Readme.md
-├── UnitRFID2/                   # RFIDカード読み取り（PICCタイプ表示）
+├── UnitRFID2/                    # RFIDカード読み取り（PICCタイプ表示）
 │   ├── UnitRFID2.ino
 │   └── Readme.md
-├── UnitRFID2_ReadWrite/         # RFIDカード読み書き
+├── UnitRFID2_ReadWrite/          # RFIDカード読み書き
 │   ├── UnitRFID2_ReadWrite.ino
 │   └── Readme.md
-├── UnitRFID2_UID/               # RFID UID表示（シンプル版）
+├── UnitRFID2_UID/                # RFID UID表示（シンプル版）
 │   ├── UnitRFID2_UID.ino
 │   └── Readme.md
-├── USB_Keyboard_Host/           # USB キーボード入力（Host モード）
+├── USB_Keyboard_Host/            # USB キーボード入力（Host モード）
 │   ├── USB_Keyboard_Host.ino
 │   └── Readme.md
-├── USB_Mouse_Host/              # USB マウス入力（Host モード）
+├── USB_Mouse_Host/               # USB マウス入力（Host モード）
 │   ├── USB_Mouse_Host.ino
 │   └── Readme.md
-├── Docs/                        # ドキュメント・スクリプト
-│   ├── Arduino_Basic_Syntax_Guide.md
-│   ├── GPIO_Application_Guide.md
-│   ├── Manufacturing_Arduino_Samples.md
-│   ├── USB_Application_Guide.md
-│   ├── compile.sh              # コンパイルスクリプト
-│   ├── monitor.sh              # シリアルモニタースクリプト
-│   └── partitions.csv          # パーティション設定ファイル
-├── LICENSE                      # ライセンスファイル
-└── Readme.md                    # このファイル
+├── LICENSE                       # ライセンスファイル
+└── Readme.md                     # このファイル
 ```
 
 ## 🚀 セットアップ
@@ -139,16 +122,6 @@ Tab5_Arduino/
 - Arduino IDE 2.x または Arduino CLI
 - ESP32-P4 ボードサポート
 - M5Stack Tab5 デバイス
-
-### Cursor/VS CodeでのIntelliSense設定
-
-CursorやVS Codeでコード補完とエラー検出を有効にするには、`.vscode/c_cpp_properties.json`が自動的に作成されています。もしインクルードエラーが表示される場合は、以下の手順を実行してください：
-
-1. **Cursor/VS Codeを再起動**するか、コマンドパレット（`Cmd+Shift+P`）から `C/C++: Reset IntelliSense Database` を実行
-2. Arduino IDEでライブラリをインストールした場合、`~/Library/Arduino15/libraries/`にライブラリが配置されます
-3. プロジェクト内の`libraries/`フォルダのライブラリも自動的に認識されます
-
-**注意**: `.vscode/`フォルダはプロジェクト固有の設定を含むため、必要に応じてGitにコミットしてください。
 
 ### ライブラリのインストール
 ```bash
@@ -201,9 +174,12 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 
 ## 📋 プログラム一覧
 
-### 📊 動作確認済みプログラム一覧（全30個）
+### 📊 動作確認済みプログラム一覧（全28個）
 
-**注意**: ネットワーク系サンプル（WiFi, HTTPS, MQTT など）や GUI 系サンプル（LVGL）は、それぞれ `Tab5_Network` / `Tab5_GUI` リポジトリに分離されています。
+**注意**: 
+- ネットワーク系サンプル（WiFi, HTTPS, MQTT, SNTP, BLE, ChatGPT連携など）は `Tab5_Network` リポジトリに移動しました
+- GUI 系サンプル（LVGLベースのアプリケーション）は `Tab5_GUI` リポジトリに移動しました
+- このリポジトリは基本的なArduinoスケッチに特化しています
 
 #### 基本機能（2個）
 | No. | プログラム名 | 状態 | 主要機能 |
@@ -237,15 +213,13 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 | 15 | GameOfLife | ✅ 完了 | ライフゲーム |
 | 16 | MP3Player | ✅ 完了 | MP3プレイヤー |
 
-#### システム・通信（6個）
+#### システム・通信（4個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
 | 17 | Power | ✅ 完了 | バッテリー管理・監視 |
 | 18 | RTC | ✅ 完了 | リアルタイムクロック |
 | 19 | SD | ✅ 完了 | SDカード機能 |
-| 20 | SNTP | ✅ 完了 | SNTP時刻同期 |
-| 21 | BLE | ✅ 完了 | BLE 基本サンプル |
-| 22 | Serial | ✅ 完了 | シリアル通信サンプル |
+| 20 | Serial | ✅ 完了 | シリアル通信サンプル |
 
 #### USB Host（2個）
 | No. | プログラム名 | 状態 | 主要機能 |
@@ -356,15 +330,7 @@ M5Unified 対応のシリアル通信サンプル。LED制御とディスプレ�
 - ディスプレイ出力
 - M5Unified ライブラリ対応
 
-#### SNTP - SNTP時刻同期
-**ファイル**: `SNTP/SNTP.ino`
-
-SNTPプロトコルを使用した時刻同期機能。
-
-**機能**:
-- NTPサーバーからの時刻取得
-- 自動時刻同期
-- 正確な時刻表示
+**注意**: SNTP（時刻同期）やBLE（Bluetooth Low Energy）などのネットワーク関連プログラムは `Tab5_Network` リポジトリに移動しました。
 
 #### USB_Keyboard_Host - USB キーボード入力
 **ファイル**: `USB_Keyboard_Host/USB_Keyboard_Host.ino`
@@ -578,9 +544,13 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 ### 動作確認済みプログラム一覧
 
-✅ **全30プログラムが正常に動作確認済み（100%）**
+✅ **全28プログラムが正常に動作確認済み（100%）**
 
-詳細は上記の「📊 動作確認済みプログラム一覧（全30個）」セクションを参照してください。
+詳細は上記の「📊 動作確認済みプログラム一覧（全28個）」セクションを参照してください。
+
+**関連リポジトリ**:
+- `Tab5_Network`: ネットワーク関連プログラム（WiFi, HTTPS, MQTT, SNTP, BLE, ChatGPT連携など）
+- `Tab5_GUI`: LVGLベースのGUIアプリケーション集
 
 ## 📖 参考資料
 
@@ -592,20 +562,25 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 ## 🎉 プロジェクト成果
 
 ### 技術的成果
-1. **完全動作する30個のプログラム**
-   - 基本機能から高機能GUI、Unit系デバイスまで幅広く対応
+1. **完全動作する28個のプログラム**（このリポジトリ）
+   - 基本機能からUnit系デバイスまで幅広く対応
    - 各プログラムに詳細なドキュメントを整備
 2. **最適化された開発環境**
    - Tab5専用の最適化設定
+   - IntelliSense設定（Cursor/VS Code対応）
    - I2C通信の安定化
    - 画面表示の最適化
 3. **包括的なドキュメント**
    - メインREADME.md
-   - 各プロジェクトのReadme.md（30個）
+   - 各プロジェクトのReadme.md（28個）
    - トラブルシューティング情報
 4. **再現可能なセットアップ手順**
    - 詳細なインストール手順
    - 動作確認済み設定の明記
+   - IntelliSense設定の自動化
+5. **プロジェクト構造の整理**
+   - 3つのリポジトリへの適切な分割（Tab5_Arduino, Tab5_GUI, Tab5_Network）
+   - 各リポジトリの役割の明確化
 
 ### 学習成果
 1. **M5Stack Tab5の全機能理解**
@@ -640,11 +615,15 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 ### 📊 プロジェクト統計
 
-- **総プログラム数**: 30個
-- **ドキュメント数**: 31個（README.md + 各プロジェクトReadme.md）
+- **総プログラム数**: 28個（このリポジトリ）
+- **ドキュメント数**: 29個（README.md + 各プロジェクトReadme.md）
 - **動作確認率**: 100%
 - **カテゴリ数**: 7カテゴリ
 - **Unit系デバイス対応**: 6種類
+
+**関連リポジトリ統計**:
+- **Tab5_Network**: ネットワーク関連プログラム（WiFi, HTTPS, MQTT, SNTP, BLE, ChatGPT連携など）
+- **Tab5_GUI**: LVGLベースのGUIアプリケーション集
 
 ### 🎓 教育価値
 
@@ -702,7 +681,11 @@ SOFTWARE.
 ---
 
 **作成日**: 2025年12月6日  
-**最終更新**: 2025年12月6日（全30プログラム動作確認完了、Unit系デバイス対応完了）  
+**最終更新**: 2025年12月6日（IntelliSense設定追加、プロジェクト構造整理、全28プログラム動作確認完了）  
 **対象デバイス**: M5Stack Tab5 (ESP32-P4)  
-**開発環境**: Arduino IDE / Arduino CLI  
-**動作確認**: 全30プログラム正常動作済み ✅
+**開発環境**: Arduino IDE / Arduino CLI / Cursor / VS Code  
+**動作確認**: 全28プログラム正常動作済み ✅
+
+**関連リポジトリ**:
+- [Tab5_Network](https://github.com/miyp/Tab5_Network): ネットワーク関連プログラム集
+- [Tab5_GUI](https://github.com/miyp/Tab5_GUI): LVGLベースのGUIアプリケーション集

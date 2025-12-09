@@ -1,21 +1,5 @@
-
-#include <M5GFX.h>
+#include <M5Unified.h>
 M5GFX display;
-
-//#include <M5UnitOLED.h>
-//M5UnitOLED display; // default setting
-//M5UnitOLED display ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5UnitLCD.h>
-//M5UnitLCD display;  // default setting
-//M5UnitLCD display  ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5UnitGLASS2.h>
-//M5UnitGLASS2 display;  // default setting
-//M5UnitGLASS2 display ( 21, 22, 400000 ); // SDA, SCL, FREQ
-
-//#include <M5AtomDisplay.h>
-//M5AtomDisplay display;
 
 M5Canvas canvas(&display);
 
@@ -66,12 +50,5 @@ void loop(void)
   }
   display.waitDisplay();
   int y = (display.height() - canvas.height()) >> 1;
-/*
-  display.copyRect(0, y, display.width(), canvas.height(), scrollstep, y);
-  display.setClipRect(display.width()-scrollstep, y, scrollstep, canvas.height());
-  canvas.pushSprite(&display, 0, (display.height() - canvas.height()) >> 1);
-  display.clearClipRect();
-/*/
   canvas.pushSprite(&display, 0, y);
-//*/
 }
