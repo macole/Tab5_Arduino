@@ -9,13 +9,6 @@
 **対象デバイス**: M5Stack Tab5 (ESP32-P4)  
 **開発環境**: Arduino CLI + M5Unified ライブラリ  
 
-### 🎯 達成した目標
-
-1. **全30プログラムの動作確認完了** (100%)
-2. **技術的課題の完全解決** (100%)
-3. **包括的ドキュメントの作成** (100%)
-4. **開発環境の最適化** (100%)
-5. **Unit系デバイス対応** (100%)
 
 ## 📁 プロジェクト構造
 
@@ -27,9 +20,6 @@ Tab5_Arduino/
 ├── BarGraph/                    # バーグラフアニメーション
 │   ├── BarGraph.ino
 │   └── Readme.md
-├── BLE/                         # BLE 基本サンプル
-│   ├── BLE.ino
-│   └── Readme.md
 ├── GameOfLife/                  # ライフゲーム
 │   ├── GameOfLife.ino
 │   └── Readme.md
@@ -39,8 +29,8 @@ Tab5_Arduino/
 ├── IMU/                         # IMUセンサー（加速度・ジャイロ）
 │   ├── IMU.ino
 │   └── Readme.md
-├── IMU_BallBox/                 # IMUボール物理シミュレーション
-│   ├── IMU0_BallBox.ino
+├── IMU_BallBox/                 # IMUボール物理シミュレーション（DMA部分更新）
+│   ├── IMU_BallBox.ino
 │   └── Readme.md
 ├── LongTextScroll/              # 長いテキストのスクロール表示
 │   ├── LongTextScroll.ino
@@ -70,11 +60,6 @@ Tab5_Arduino/
 ├── Serial/                      # シリアル通信サンプル
 │   ├── Serial.ino
 │   └── Readme.md
-├── SNTP/                        # SNTP時刻同期（ネットワーク設定は Tab5_Network 参照）
-│   ├── SNTP.ino
-│   ├── Readme.md
-│   ├── secrets.h
-│   └── secrets.h.example
 ├── Speaker/                     # スピーカーテスト
 │   ├── Speaker.ino
 │   └── Readme.md
@@ -87,17 +72,14 @@ Tab5_Arduino/
 ├── TextLogScroll/               # テキストログの縦スクロール
 │   ├── TextLogScroll.ino
 │   └── Readme.md
-├── TextSample/                  # テキストサンプル
-│   ├── TextSample.ino
+├── Touch_Drawing/               # タッチお絵描き
+│   ├── Touch_Drawing.ino
 │   └── Readme.md
-├── Touch/                       # タッチセンサー
-│   ├── Touch.ino
+├── Touch_GUI/                   # タッチGUIデモ
+│   ├── Touch_GUI.ino
 │   └── Readme.md
 ├── Touch_Multi/                 # マルチタッチ対応
 │   ├── Touch_Multi.ino
-│   └── Readme.md
-├── Touch_Test/                  # タッチテスト（クリアボタン付き）
-│   ├── Touch_Test.ino
 │   └── Readme.md
 ├── UnitByteSwitch/              # 8スイッチ・LED制御
 │   ├── UnitByteSwitch.ino
@@ -201,9 +183,9 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 
 ## 📋 プログラム一覧
 
-### 📊 動作確認済みプログラム一覧（全30個）
+### 📊 動作確認済みプログラム一覧（全27個）
 
-**注意**: ネットワーク系サンプル（WiFi, HTTPS, MQTT など）や GUI 系サンプル（LVGL）は、それぞれ `Tab5_Network` / `Tab5_GUI` リポジトリに分離されています。
+**注意**: ネットワーク系サンプル（WiFi, HTTPS, MQTT, SNTP など）や GUI 系サンプル（LVGL）は、それぞれ `Tab5_Network` / `Tab5_GUI` リポジトリに分離されています。
 
 #### 基本機能（2個）
 | No. | プログラム名 | 状態 | 主要機能 |
@@ -215,53 +197,50 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
 | 3 | IMU | ✅ 完了 | 加速度・ジャイロセンサー表示 |
-| 4 | IMU_BallBox | ✅ 完了 | ボール物理シミュレーション |
-| 5 | Touch | ✅ 完了 | タッチセンサー検出 |
-| 6 | TouchTest | ✅ 完了 | タッチテスト（クリアボタン付き） |
+| 4 | IMU_BallBox | ✅ 完了 | IMU物理シミュレーション（DMA高速描画） |
+| 5 | Touch_Drawing | ✅ 完了 | タッチお絵描き（マルチタッチ対応） |
+| 6 | Touch_GUI | ✅ 完了 | タッチGUIデモ |
 | 7 | Touch_Multi | ✅ 完了 | マルチタッチ対応 |
 | 8 | MIC | ✅ 完了 | マイク録音・再生機能 |
 
-#### 出力・表示（6個）
+#### 出力・表示（5個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
 | 9 | Speaker | ✅ 完了 | スピーカーテスト |
 | 10 | Sprite | ✅ 完了 | スプライト（メモリ描画領域）デモ |
 | 11 | LongTextScroll | ✅ 完了 | 長いテキストのスクロール表示 |
 | 12 | TextLogScroll | ✅ 完了 | テキストログの縦スクロール |
-| 13 | TextSample | ✅ 完了 | テキストサンプル表示 |
-| 14 | SpinTile | ✅ 完了 | スピンタイルアニメーション |
+| 13 | SpinTile | ✅ 完了 | スピンタイルアニメーション |
 
 #### ゲーム・エンターテインメント（2個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
-| 15 | GameOfLife | ✅ 完了 | ライフゲーム |
-| 16 | MP3Player | ✅ 完了 | MP3プレイヤー |
+| 14 | GameOfLife | ✅ 完了 | ライフゲーム |
+| 15 | MP3Player | ✅ 完了 | MP3プレイヤー |
 
-#### システム・通信（6個）
+#### システム・通信（4個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
-| 17 | Power | ✅ 完了 | バッテリー管理・監視 |
-| 18 | RTC | ✅ 完了 | リアルタイムクロック |
-| 19 | SD | ✅ 完了 | SDカード機能 |
-| 20 | SNTP | ✅ 完了 | SNTP時刻同期 |
-| 21 | BLE | ✅ 完了 | BLE 基本サンプル |
-| 22 | Serial | ✅ 完了 | シリアル通信サンプル |
+| 16 | Power | ✅ 完了 | バッテリー管理・監視 |
+| 17 | RTC | ✅ 完了 | リアルタイムクロック |
+| 18 | SD | ✅ 完了 | SDカード機能 |
+| 19 | Serial | ✅ 完了 | シリアル通信サンプル |
 
 #### USB Host（2個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
-| 23 | USB_Keyboard_Host | ✅ 完了 | USB キーボード入力（EspUsbHost） |
-| 24 | USB_Mouse_Host | ✅ 完了 | USB マウス入力（EspUsbHost） |
+| 20 | USB_Keyboard_Host | ✅ 完了 | USB キーボード入力（EspUsbHost） |
+| 21 | USB_Mouse_Host | ✅ 完了 | USB マウス入力（EspUsbHost） |
 
 #### Unit系デバイス（6個）
 | No. | プログラム名 | 状態 | 主要機能 |
 |-----|-------------|------|----------|
-| 25 | UnitRFID2 | ✅ 完了 | RFIDカード読み取り（PICCタイプ表示） |
-| 26 | UnitRFID2_UID | ✅ 完了 | RFID UID表示（シンプル版） |
-| 27 | UnitRFID2_ReadWrite | ✅ 完了 | RFIDカード読み書き |
-| 28 | UnitByteSwitch | ✅ 完了 | 8スイッチ・LED制御 |
-| 29 | UnitQRCode_i2c | ✅ 完了 | QRコード読み取り |
-| 30 | HEX_SK6812 | ✅ 完了 | Unit HEX LEDストリップ制御 |
+| 22 | UnitRFID2 | ✅ 完了 | RFIDカード読み取り（PICCタイプ表示） |
+| 23 | UnitRFID2_UID | ✅ 完了 | RFID UID表示（シンプル版） |
+| 24 | UnitRFID2_ReadWrite | ✅ 完了 | RFIDカード読み書き |
+| 25 | UnitByteSwitch | ✅ 完了 | 8スイッチ・LED制御 |
+| 26 | UnitQRCode_i2c | ✅ 完了 | QRコード読み取り |
+| 27 | HEX_SK6812 | ✅ 完了 | Unit HEX LEDストリップ制御 |
 
 ### 主要プログラムの詳細説明
 
@@ -316,14 +295,44 @@ arduino-cli upload -p /dev/cu.usbmodem21201 \
 - 再度タッチして再生
 
 #### IMU_BallBox - ボール物理シミュレーション
-**ファイル**: `IMU_BallBox/IMU0_BallBox.ino`
+**ファイル**: `IMU_BallBox/IMU_BallBox.ino`
 
-IMUセンサーのデータを使用したボール物理シミュレーション。
+デバイスを傾けると、IMUの加速度データに基づいてボールが物理法則に従って動きます。DMA部分更新により滑らかで高速なアニメーションを実現。
 
 **機能**:
-- 加速度・ジャイロセンサーによる物理演算
-- リアルタイムボールアニメーション
-- 重力と慣性のシミュレーション
+- **物理シミュレーション**: 重力、慣性、減衰、壁反発
+- **高速描画**: DMA部分更新（60FPS）、動的マージンによるゴミ対策
+- **IMU連動**: 200Hz更新、画面回転対応の座標変換
+- **デバッグ表示**: ボールの位置と速度をリアルタイム表示
+- **PSRAM使用**: 1280x720の大容量スプライト（1.8MB）
+
+**使用方法**:
+```bash
+./Docs/compile.sh IMU_BallBox/IMU_BallBox.ino
+```
+
+デバイスを傾けるとボールが動き、画面の端で跳ね返ります
+
+#### Touch_Drawing - タッチお絵描き
+**ファイル**: `Touch_Drawing/Touch_Drawing.ino`
+
+マルチタッチ機能を使ったお絵描きプログラム。タッチIDごとに異なる図形（丸、×印、三角）を描画します。
+
+**機能**:
+- マルチタッチ対応（最大3点同時描画）
+- タッチIDによる図形の自動切り替え
+- Clearボタンによる画面クリア
+- リアルタイム座標表示
+
+#### Touch_GUI - タッチGUIデモ
+**ファイル**: `Touch_GUI/Touch_GUI.ino`
+
+タッチスクリーンを使用したシンプルなGUIデモプログラム。
+
+**機能**:
+- タッチ検出とGUI表示
+- インタラクティブな操作
+- タッチポイントの可視化
 
 #### Touch_Multi - マルチタッチ対応
 **ファイル**: `Touch_Multi/Touch_Multi.ino`
@@ -356,16 +365,6 @@ M5Unified 対応のシリアル通信サンプル。LED制御とディスプレ�
 - ディスプレイ出力
 - M5Unified ライブラリ対応
 
-#### SNTP - SNTP時刻同期
-**ファイル**: `SNTP/SNTP.ino`
-
-SNTPプロトコルを使用した時刻同期機能。
-
-**機能**:
-- NTPサーバーからの時刻取得
-- 自動時刻同期
-- 正確な時刻表示
-
 #### USB_Keyboard_Host - USB キーボード入力
 **ファイル**: `USB_Keyboard_Host/USB_Keyboard_Host.ino`
 
@@ -373,9 +372,10 @@ EspUsbHost ライブラリを使用した USB キーボード入力サンプル�
 
 **機能**:
 - USB キーボード入力の受信
-- 文字入力の画面・シリアル表示
-- 修飾キー（Shift, Ctrl, Alt など）の検出
+- 文字入力の画面中央に大きく表示（サイズ3）
+- 修飾キー（Shift, Ctrl, Alt など）の検出と表示
 - 特殊キー（Enter, Backspace など）の処理
+- マルチタッチ対応（最大3点）
 
 #### USB_Mouse_Host - USB マウス入力
 **ファイル**: `USB_Mouse_Host/USB_Mouse_Host.ino`
@@ -387,17 +387,6 @@ EspUsbHost ライブラリを使用した USB マウス入力サンプル。USB 
 - マウス移動量の画面表示（カーソル表示）
 - ボタンクリックの検出
 - マウス接続状態の表示
-
-#### TextSample - テキストサンプル
-**ファイル**: `TextSample/TextSample.ino`
-
-様々なテキスト表示のサンプルプログラム。
-
-**機能**:
-- 複数のフォント表示
-- テキストスタイルのデモ
-- 文字列操作の例
-
 
 ## 🛠️ 開発ツール
 
@@ -578,9 +567,9 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 ### 動作確認済みプログラム一覧
 
-✅ **全30プログラムが正常に動作確認済み（100%）**
+✅ **全27プログラムが正常に動作確認済み（100%）**
 
-詳細は上記の「📊 動作確認済みプログラム一覧（全30個）」セクションを参照してください。
+詳細は上記の「📊 動作確認済みプログラム一覧（全27個）」セクションを参照してください。
 
 ## 📖 参考資料
 
@@ -592,7 +581,7 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 ## 🎉 プロジェクト成果
 
 ### 技術的成果
-1. **完全動作する30個のプログラム**
+1. **完全動作する27個のプログラム**
    - 基本機能から高機能GUI、Unit系デバイスまで幅広く対応
    - 各プログラムに詳細なドキュメントを整備
 2. **最適化された開発環境**
@@ -601,7 +590,7 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
    - 画面表示の最適化
 3. **包括的なドキュメント**
    - メインREADME.md
-   - 各プロジェクトのReadme.md（30個）
+   - 各プロジェクトのReadme.md（27個）
    - トラブルシューティング情報
 4. **再現可能なセットアップ手順**
    - 詳細なインストール手順
@@ -640,8 +629,8 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 ### 📊 プロジェクト統計
 
-- **総プログラム数**: 30個
-- **ドキュメント数**: 31個（README.md + 各プロジェクトReadme.md）
+- **総プログラム数**: 27個
+- **ドキュメント数**: 28個（README.md + 各プロジェクトReadme.md）
 - **動作確認率**: 100%
 - **カテゴリ数**: 7カテゴリ
 - **Unit系デバイス対応**: 6種類
@@ -699,10 +688,3 @@ SOFTWARE.
 
 詳細は`LICENSE`ファイルを参照してください。
 
----
-
-**作成日**: 2025年12月6日  
-**最終更新**: 2025年12月6日（全30プログラム動作確認完了、Unit系デバイス対応完了）  
-**対象デバイス**: M5Stack Tab5 (ESP32-P4)  
-**開発環境**: Arduino IDE / Arduino CLI  
-**動作確認**: 全30プログラム正常動作済み ✅

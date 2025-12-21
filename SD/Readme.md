@@ -1,15 +1,16 @@
-# SD - SDカード機能
+# SD Card - SDカード画像表示
 
-M5Stack Tab5のSDカード機能を使用して、ファイルの読み書きとPNG画像の表示を行うプログラムです。
+M5Stack Tab5のSDカードスロットを使用してファイルの読み書きと画像表示を行うプログラムです。
 
 ## 📋 概要
 
-このプログラムは、M5Stack Tab5のSDカードスロットを使用して、SDカード内のファイルを読み書きし、PNG画像を表示するデモプログラムです。テキストファイルの作成とPNG画像のループ再生を行います。
+SDカードから画像ファイル（PNG/JPEG）を読み込んで表示します。M5GFXとSDライブラリの互換性問題を回避するため、画像をメモリバッファに読み込んでから描画する方式を採用しています。
 
 ## 🔧 必要なハードウェア
 
 - M5Stack Tab5
-- microSDカード（FAT32形式）
+- microSDカード（FAT32フォーマット推奨）
+- 画像ファイル（PNG または JPEG形式）
 
 ## 📚 必要なライブラリ
 
@@ -17,121 +18,179 @@ M5Stack Tab5のSDカード機能を使用して、ファイルの読み書きと
   ```bash
   arduino-cli lib install "M5Unified@0.2.10"
   ```
-- **M5GFX**: M5Stack用グラフィックライブラリ
-  ```bash
-  arduino-cli lib install "M5GFX@0.2.15"
-  ```
-- **SD**: Arduino標準ライブラリ（Arduino IDEに含まれています）
-- **SPI**: Arduino標準ライブラリ（Arduino IDEに含まれています）
 
 ## 🚀 セットアップ
 
-1. **ボード設定**
-   - Board: ESP32P4 Dev Module
-   - USB CDC on boot: Enabled
-   - Flash Size: 16MB (128Mb)
-   - Partition Scheme: Custom
-   - PSRAM: Enabled
+### ボード設定
+- Board: ESP32P4 Dev Module
+- USB CDC on boot: Enabled
+- Flash Size: 16MB (128Mb)
+- Partition Scheme: Custom
+- PSRAM: Enabled（画像読み込みに必要）
 
-2. **SDカードの準備**
-   - microSDカードをFAT32形式でフォーマット
-   - ルートディレクトリに以下のPNG画像を配置：
-     - `TestPicture01.png`（解像度: 720×1280推奨）
-     - `TestPicture02.png`（解像度: 720×1280推奨）
-   - SDカードをTab5に挿入（端子面はスクリーンと同じ方向）
+### SDカードの準備
+1. microSDカードをFAT32でフォーマット
+2. 以下の画像ファイルをSDカードのルートディレクトリに配置：
+   - `/tab5_test_picture_1280_x_720_01.png`
+   - `/tab5_test_picture_1280_x_720_02.png`
 
-3. **プログラムのアップロード**
-   - Arduino IDEまたはArduino CLIでプログラムをアップロード
+**推奨画像サイズ**: 1280x720（Tab5の画面サイズ）
+
+### プログラムのアップロード
+Arduino IDEまたはArduino CLIでプログラムをアップロードしてください。
 
 ## 💻 使用方法
 
-1. SDカードを準備してTab5に挿入
+1. 画像ファイルを準備したmicroSDカードをTab5に挿入
 2. プログラムをアップロード
-3. プログラムが自動的に以下を実行します：
-   - SDカードの検出
-   - `WriteTest.txt`ファイルの作成と書き込み
-   - PNG画像のループ再生
+3. 自動的に以下の処理が実行されます：
+   - SDカード検出
+   - テキストファイル書き込みテスト
+   - 画像ファイル存在確認
+   - 2つの画像を交互に表示
 
 ## 📊 機能
 
-- **SDカード検出**: SDカードの有無を確認
+### SDカード操作
+- **SDカード検出**: SPIインターフェースでSDカードを初期化
 - **ファイル書き込み**: テキストファイルの作成と書き込み
-- **PNG画像表示**: SDカード内のPNG画像を表示
-- **ループ再生**: 複数の画像を順番に表示
+- **ファイル存在確認**: 画像ファイルの存在をチェック
+
+### 画像表示
+- **PNG/JPEG対応**: 両形式の画像を自動判定して表示
+- **メモリバッファ方式**: 互換性問題を回避
+- **大容量画像対応**: PSRAMを使用して大きな画像も表示可能
+- **エラーハンドリング**: ファイル読み込み失敗時のエラー表示
+
+### デバッグ機能
+- シリアルモニターに詳細な情報を出力
+- ファイルサイズ、読み込み状況、描画結果を表示
 
 ## 🔍 プログラムの動作
 
-1. **初期化**
-   - M5Stackの初期化
-   - SPIバスの初期化（SDカード用ピン設定）
-   - SDカードの検出
+### 初期化フロー
+1. M5Unified初期化
+2. シリアル通信開始（115200bps）
+3. SDカード初期化（SPI、25MHz）
+4. テキストファイル書き込みテスト
+5. 画像ファイル存在確認
 
-2. **ファイル操作**
-   - `WriteTest.txt`ファイルを作成
-   - テキストデータを書き込み
+### メインループ
+1. 画像1をメモリに読み込んで表示
+2. 2秒待機
+3. 画像2をメモリに読み込んで表示
+4. 2秒待機
+5. 繰り返し
 
-3. **画像表示ループ**
-   - `TestPicture01.png`を表示
-   - `TestPicture02.png`を表示
-   - 繰り返し
+### 画像読み込みフロー（`drawImageFromSD()`関数）
+1. ファイルを開く
+2. ファイルサイズを取得
+3. メモリバッファを確保（`malloc`）
+4. ファイル全体をバッファに読み込む
+5. 拡張子から形式を判定（PNG/JPEG）
+6. バッファから画像を描画
+7. メモリを解放（`free`）
 
 ## 📝 コードの主要なポイント
 
-### SDカード用SPIピンの設定
+### SPIピン定義
 ```cpp
-#define SD_SPI_CS_PIN   42
-#define SD_SPI_SCK_PIN  43
-#define SD_SPI_MOSI_PIN 44
-#define SD_SPI_MISO_PIN 39
+#define SD_SPI_CS_PIN   42  // Chip Select
+#define SD_SPI_SCK_PIN  43  // Clock
+#define SD_SPI_MOSI_PIN 44  // Master Out Slave In
+#define SD_SPI_MISO_PIN 39  // Master In Slave Out
 ```
 
-### SPIバスの初期化
+### メモリバッファ経由の描画
 ```cpp
-SPI.begin(SD_SPI_SCK_PIN, SD_SPI_MISO_PIN, SD_SPI_MOSI_PIN, SD_SPI_CS_PIN);
+// SDカードから直接描画できない互換性問題を回避
+uint8_t* buffer = (uint8_t*)malloc(fileSize);
+file.read(buffer, fileSize);
+M5.Display.drawPng(buffer, fileSize, 0, 0);
+free(buffer);
 ```
 
-### SDカードの初期化
+### 自動形式判定
 ```cpp
-if (!SD.begin(SD_SPI_CS_PIN, SPI, 25000000)) {
-    // エラー処理
+if (strstr(path, ".png") || strstr(path, ".PNG")) {
+    M5.Display.drawPng(buffer, fileSize, 0, 0);
+} else if (strstr(path, ".jpg") || strstr(path, ".JPG")) {
+    M5.Display.drawJpg(buffer, fileSize, 0, 0);
 }
 ```
 
-### ファイルの書き込み
+## 🎨 カスタマイズ
+
+### 画像ファイル名の変更
 ```cpp
-auto file = SD.open("/WriteTest.txt", FILE_WRITE, true);
-if (file) {
-    file.print("Hello, world!");
-    file.close();
-}
+drawImageFromSD("/your_image.png");
 ```
 
-### PNG画像の表示
+### 表示時間の調整
 ```cpp
-M5.Display.drawPngFile(SD, "/TestPicture01.png");
+delay(2000);  // 2秒 → 任意の値に変更
 ```
+
+### 画像位置の変更
+```cpp
+M5.Display.drawPng(buffer, fileSize, x, y);  // x, y座標を指定
+```
+
+### 対応形式の追加
+BMP形式など他の形式も追加可能：
+```cpp
+M5.Display.drawBmp(buffer, fileSize, 0, 0);
+```
+
+## ⚠️ 注意事項
+
+### メモリ容量
+- 大きな画像（数MB以上）はメモリ不足になる可能性があります
+- PSRAMを有効にしてください（ボード設定）
+- 推奨画像サイズ: 1280x720以下
+
+### SDカード
+- FAT32フォーマット推奨
+- 高速なClass 10以上のSDカードを推奨
+- ファイル名は8.3形式（8文字+拡張子3文字）が安全
+
+### 互換性
+- M5GFX 0.2.15以降推奨
+- ESP32-P4のSDライブラリとの互換性のため、メモリバッファ方式を採用
 
 ## 🔧 トラブルシューティング
 
-### SDカードが検出されない場合
-- SDカードがFAT32形式でフォーマットされているか確認してください
-- SDカードが正しく挿入されているか確認してください
-- SDカードの容量が大きすぎる場合、32GB以下を推奨します
-- シリアルモニターでエラーメッセージを確認してください
+### SDカードが検出されない
+- SDカードが正しく挿入されているか確認
+- FAT32でフォーマットされているか確認
+- SPIピンの接続を確認
 
-### 画像が表示されない場合
-- 画像ファイル名が正しいか確認してください（`TestPicture01.png`、`TestPicture02.png`）
-- 画像の解像度が720×1280であることを確認してください
-- PNG形式であることを確認してください
+### 画像が表示されない
+- ファイル名が正しいか確認（大文字小文字も区別）
+- 画像形式がPNGまたはJPEGか確認
+- 画像サイズが大きすぎないか確認（1280x720推奨）
 
-### ファイルが書き込めない場合
-- SDカードが書き込み可能か確認してください（書き込み保護スイッチ）
-- SDカードの空き容量を確認してください
+### メモリ不足エラー
+- PSRAM設定が有効になっているか確認
+- 画像ファイルサイズを小さくする
+- 画像を圧縮する
+
+### シリアルモニターでデバッグ
+```
+SD card detected
+Write test success
+Image 01 found
+Image 02 found
+Drawing image 01...
+File size: 123456 bytes
+Successfully drew: /tab5_test_picture_1280_x_720_01.png
+```
 
 ## 📖 参考資料
 
-- [SD Library | Arduino Documentation](https://www.arduino.cc/reference/en/libraries/sd/)
-- [M5GFX API - drawPngFile](https://github.com/m5stack/M5GFX)
+- [M5Unified ライブラリ](https://github.com/m5stack/M5Unified)
+- [M5GFX ライブラリ](https://github.com/m5stack/M5GFX)
+- [Arduino SD ライブラリ](https://www.arduino.cc/reference/en/libraries/sd/)
 
 ## 📄 ライセンス
 
@@ -144,5 +203,6 @@ Copyright (c) 2025 macole
 ---
 
 **作成日**: 2025年12月6日  
+**最終更新**: 2025年12月21日（メモリバッファ方式に変更）  
 **対象デバイス**: M5Stack Tab5  
 **動作確認**: ✅ 正常動作確認済み

@@ -17,7 +17,5 @@ Assets/
 
 # 認証情報・設定ファイル（Gitにコミットしない）
 **/secrets.h
-**/config.h
 **/*_secrets.h
-**/*_config.h
 
