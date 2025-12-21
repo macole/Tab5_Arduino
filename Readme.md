@@ -571,6 +571,41 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 詳細は上記の「📊 動作確認済みプログラム一覧（全27個）」セクションを参照してください。
 
+## 🔗 参考リンク集
+
+このプロジェクトのサンプルは、以下の資料やWebサイトを参考に作成されています。
+
+### 公式ドキュメント
+- [M5Stack Tab5 公式ドキュメント](https://docs.m5stack.com/)
+- [M5Unified ライブラリ GitHub](https://github.com/m5stack/M5Unified)
+- [M5GFX ライブラリ GitHub](https://github.com/m5stack/M5GFX)
+- [LovyanGFX ライブラリ GitHub](https://github.com/lovyan03/LovyanGFX)
+- [Arduino ESP32 ドキュメント](https://docs.espressif.com/projects/arduino-esp32/en/latest/)
+
+### サンプル別参考リンク
+
+#### GameOfLife
+- [Conway's Game of Life - Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+
+#### MP3Player
+- [ESP8266Audio ライブラリ GitHub](https://github.com/earlephilhower/ESP8266Audio)
+
+#### IMU / IMU_BallBox
+- [M5Stack IMU (MPU6886) Documentation](https://docs.m5stack.com/)
+
+#### Unit系デバイス (RFID, QRCode, ByteSwitch, HEX)
+- [M5Stack Unit RFID2](https://docs.m5stack.com/)
+- [M5Stack Unit QRCode](https://docs.m5stack.com/)
+- [M5Stack Unit Byte](https://docs.m5stack.com/)
+- [M5Stack Unit HEX](https://docs.m5stack.com/)
+- [FastLED ライブラリ GitHub](https://github.com/FastLED/FastLED)
+- [MFRC522 I2C ライブラリ](https://github.com/arozcan/MFRC522-I2C-Library)
+
+#### USB Host (Keyboard / Mouse)
+- [EspUsbHost ライブラリ GitHub](https://github.com/touchgadget/esp32-usb-host-demos)
+
+---
+
 ## 📖 参考資料
 
 - [M5Stack Tab5 公式ドキュメント](https://docs.m5stack.com/)
