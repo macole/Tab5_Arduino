@@ -697,7 +697,7 @@ arduino-cli upload -p /dev/cu.usbmodem21201 --fqbn esp32:esp32:esp32p4 [スケ�
 
 ### MIT License
 
-Copyright (c) 2025 M5Stack Tab5 Arduino Project Contributors
+Copyright (c) 2025 macole
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
